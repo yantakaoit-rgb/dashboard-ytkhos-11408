@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Hospital Yantakhao Management Dashboard </title>
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap">
@@ -63,11 +63,15 @@ svg{touch-action:pan-y}.hit{fill:transparent;cursor:crosshair}.hit:hover,.hit.on
 
 #v3{--ink:#0a1626;--panel:#0f2236ee;--line:#ffffff1f;--tx:#e8f1f8;--mut:#8da4b8;position:relative;height:min(86vh,760px);min-height:480px;border-radius:12px;overflow:hidden;background:#0a1626;color:#e8f1f8}
 #v3 canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+#v3.tbh #vtop,#v3.tbh #vlist,#v3.tbh #vdet,#v3.tbh #vhint,#v3.tbh #vzi,#v3.tbh #vzo,#v3.tbh #vzr{display:none}
+#vtg{position:absolute!important;right:14px!important;bottom:14px!important;z-index:99!important;font:inherit;font-size:15px!important;font-weight:700!important;padding:11px 18px!important;border-radius:999px!important;border:2px solid #fff!important;background:#0b7a8a!important;color:#fff!important;cursor:pointer;box-shadow:0 4px 16px #000a!important;opacity:1!important}#vtg:hover{background:#0e97a9!important}
+#vz{bottom:72px!important;right:14px!important;z-index:99!important}#vz button{background:#0f2236!important;color:#fff!important;border:2px solid #fff!important;width:42px;height:42px;font-size:20px!important;font-weight:700;opacity:1!important;box-shadow:0 3px 10px #000a!important}#vz button:hover{background:#0b7a8a!important}
 #v3 .p{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(8px)}
 #vtop{top:10px;left:10px;right:10px;padding:8px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
 #vkc{display:flex;gap:8px;flex-wrap:wrap}#vkc div{background:#ffffff0d;border-radius:9px;padding:4px 10px}#vkc i{font-style:normal;color:var(--mut);font-size:11px;display:block}#vkc b{font-size:16px}
 #vtop .c3{display:flex;gap:6px;align-items:center}#vtop input,#vtop button,#vz button{font:inherit;font-size:13px;padding:5px 9px;border-radius:8px;border:1px solid var(--line);background:#ffffff12;color:#e8f1f8;color-scheme:dark;cursor:pointer}
 #vlist{left:10px;top:68px;width:190px;padding:6px;max-height:calc(100% - 130px);overflow:auto}
+#vlist{transition:opacity .35s,transform .35s}#vlist.hid{opacity:0;transform:translateX(-14px);pointer-events:none}
 #vlist button{display:flex;width:100%;gap:9px;align-items:center;text-align:left;font:inherit;font-size:13px;color:#e8f1f8;background:none;border:0;border-radius:8px;padding:7px 8px;cursor:pointer}
 #vlist button:hover,#vlist button.on{background:#ffffff14}#vlist button i{width:9px;height:9px;border-radius:50%;flex:none}#vlist small{display:block;color:var(--mut);font-size:11px}
 #vdet{right:10px;top:68px;width:270px;padding:14px;max-height:calc(100% - 130px);overflow:auto;font-size:13.5px}
@@ -76,10 +80,85 @@ svg{touch-action:pan-y}.hit{fill:transparent;cursor:crosshair}.hit:hover,.hit.on
 #vhint{left:50%;bottom:10px;transform:translateX(-50%);padding:6px 14px;color:var(--mut);font-size:12px;white-space:nowrap}
 #vmsg{left:50%;top:62px;transform:translateX(-50%);padding:4px 12px;color:#f5b441;font-size:12.5px}#vmsg:empty{display:none}
 #vz{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:6px}
-@media(max-width:900px){#vlist{top:auto;bottom:46px;left:10px;right:10px;width:auto;display:flex;max-height:none;overflow-x:auto}#vlist button{min-width:120px}#vdet{top:auto;bottom:110px;left:10px;right:10px;width:auto;max-height:30%}#vhint{display:none}#vz{bottom:auto;top:70px}}
+@media(max-width:900px){#vlist{top:auto;bottom:46px;left:10px;right:10px;width:auto;display:flex;max-height:none;overflow-x:auto}#vlist button{min-width:120px}#vdet{top:auto;bottom:110px;left:10px;right:10px;width:auto;max-height:30%}#vhint{display:none}#vz{bottom:auto!important;top:70px}}
 dialog{border:0;border-radius:14px;padding:22px;width:min(480px,92vw)}dialog label{display:block;margin:10px 0 3px;font-size:12px;color:var(--mut)}
 dialog input{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px}
 dialog button{font:inherit;padding:8px 14px;border-radius:8px;border:0;background:var(--teal);color:#fff;cursor:pointer;margin:14px 6px 0 0}dialog button.g{background:#64748b}
+/* ===== สไตล์ของการ์ดรายรับ แผนก/หอผู้ป่วย/สิทธิ ===== */
+.tg{display:flex;gap:6px;align-items:center;flex-wrap:wrap} /* แถวปุ่ม: เรียงแนวนอน เว้นช่อง 6px ขึ้นบรรทัดใหม่ได้ */
+.tg button{font:inherit;font-size:13px;padding:6px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer} /* ปุ่มปกติ: พื้นขาว ขอบเทา มุมมน */
+.tg button.on{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600} /* ปุ่มที่เลือกอยู่: พื้นเขียวน้ำเงิน ตัวขาวหนา */
+.tg button:focus-visible{outline:2px solid var(--amber)} /* วงโฟกัสสีอำพันเมื่อใช้คีย์บอร์ด */
+.tg span{margin-left:auto;color:var(--mut);font-size:12px} /* ข้อความหน่วยชิดขวา สีจาง */
+@media(max-width:600px){#dpc .kp{grid-template-columns:1fr!important}} /* มือถือ: ช่องสรุปเรียงเป็นคอลัมน์เดียว */
+</style>
+<style id="reskin">
+/* ===== ดีไซน์ใหม่ (reskin) — ไม่แตะส่วน 3D (#v3 / #s3d) ===== */
+:root{--ink:#0b1f33;--teal:#0f8f96;--tl:#2dd4bf;--paper:#eef3f8;--line:#e2eaf2;--mut:#60758a;--amber:#f59e0b;--coral:#ef4444;--green:#16a37a;--r:22px;--sh:0 1px 2px #0b1f3310,0 12px 32px -12px #0b1f3322}
+body{background:radial-gradient(1200px 500px at 85% -10%,#2dd4bf26,transparent 60%),radial-gradient(900px 500px at -10% 0,#2563eb1f,transparent 55%),var(--paper);background-attachment:fixed;letter-spacing:.1px}
+header{background:linear-gradient(115deg,#082b3a 0%,#0b6b78 55%,#1d6fe0 130%);padding:22px clamp(14px,3vw,36px) 30px;border-radius:0 0 28px 28px;box-shadow:0 18px 40px -22px #0b3a5a}
+header .logo{background:#ffffff26;backdrop-filter:blur(6px);border:1px solid #ffffff40;border-radius:16px}
+.ctl button,.ctl input{border-radius:999px;border-color:#ffffff38;background:#ffffff1a;backdrop-filter:blur(6px);transition:.15s}
+.ctl button:hover{background:#ffffff33}.ctl button.on{background:#fff;color:#08323f;box-shadow:0 4px 14px #0003}
+#snav{position:sticky;top:0;z-index:40;display:flex;gap:6px;overflow-x:auto;padding:10px clamp(14px,3vw,36px);margin:0 auto;max-width:1480px;scrollbar-width:none;backdrop-filter:blur(14px);background:#eef3f8cc}
+#snav::-webkit-scrollbar{display:none}
+#snav a{flex:none;text-decoration:none;color:var(--mut);font-size:13px;font-weight:500;padding:7px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);transition:.15s}
+#snav a:hover{color:var(--teal);border-color:var(--tl)}#snav a.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+main{gap:20px;padding-top:10px}
+.s{border:1px solid #ffffffb0;border-radius:var(--r);box-shadow:var(--sh);padding:22px;background:#ffffffee;scroll-margin-top:64px}
+.h{margin-bottom:18px}.h b{background:linear-gradient(135deg,var(--teal),#2563eb);border-radius:10px;min-width:28px;height:28px;font-size:13px;box-shadow:0 6px 14px -6px var(--teal)}
+.h h2{font-size:17px;font-weight:700}.h span{background:#eef3f8;border-radius:99px;padding:3px 12px;font-size:11.5px}
+main .gauge{background:linear-gradient(150deg,#082b3a,#0f6a7a);border-radius:18px}
+main .k{border:0;border-radius:16px;background:linear-gradient(180deg,#f7fafd,#eef4fa);padding:14px 14px 10px}
+main .k strong{font-size:28px;letter-spacing:-.5px}
+main .bar div{height:12px;background:#e8eef5}
+main table th{text-transform:none;font-size:12px;padding:10px 8px;border-bottom:2px solid var(--line)}
+main table tr:hover td{background:#f5f9fc}
+main .chip{border-radius:99px;padding:3px 12px}
+main .tg button{border-radius:999px;padding:6px 18px;transition:.15s}main .tg button.on{background:linear-gradient(135deg,var(--teal),#2563eb);border:0}
+.rb>div{border-radius:16px;border-left-width:0;box-shadow:var(--sh);background:linear-gradient(90deg,#e6f7f7,#fff 60%)}
+.hit:hover,.hit.on{fill:rgba(15,143,150,.12)}
+#sec1{background:linear-gradient(180deg,#fff,#f4f9fc)}
+@media(max-width:600px){.s{padding:16px;border-radius:18px}header{border-radius:0 0 20px 20px}}
+@media(prefers-reduced-motion:no-preference){.s{animation:rise .5s ease both}@keyframes rise{from{opacity:0;transform:translateY(10px)}}}
+.now{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--mut);background:#eef6f7;border-radius:999px;padding:5px 14px;margin-bottom:12px;font-variant-numeric:tabular-nums}
+.now b{color:var(--ink);font-weight:600}.nd0{width:8px;height:8px;border-radius:50%;background:#16a37a;box-shadow:0 0 0 0 #16a37a88;animation:pls 1.6s infinite}
+#v3 .now{margin:0;color:#e8f1f8}#v3 .now b{color:#fff}@keyframes pls{70%{box-shadow:0 0 0 7px #16a37a00}}
+@media(prefers-reduced-motion:reduce){.nd0{animation:none}}
+.gb{display:flex;height:14px;border-radius:99px;overflow:hidden;background:#e8eef5;margin:6px 0}.gb i{display:block;height:100%}.gl{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;margin-bottom:4px}.gl b{font-variant-numeric:tabular-nums}
+.dpw{max-height:600px;overflow:auto;border:1px solid var(--line);border-radius:16px;margin-top:10px}
+.dpw table{min-width:820px;border-collapse:separate;border-spacing:0}
+.dpw th{position:sticky;top:0;z-index:3;background:#f1f6fa;border-bottom:1px solid var(--line);white-space:nowrap}
+.dpw td{border-bottom:1px solid #edf2f7;padding:11px 10px;white-space:nowrap}
+.dpw tr:nth-child(even) td{background:#fafcfe}.dpw tr:hover td{background:#eef7f8}
+.dpw td:first-child{position:sticky;left:0;background:inherit;z-index:1}.dpw th:first-child{left:0;z-index:4}
+.dpw tr.tt td{position:sticky;bottom:0;z-index:2;background:#e7f3f5;font-weight:700;border-top:2px solid var(--tl);border-bottom:0}
+.rk{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:#eef3f8;font-size:12px;font-weight:600;color:var(--mut);margin-right:10px}.rk.t{background:linear-gradient(135deg,var(--teal),#2563eb);color:#fff}
+main .k{display:flex;flex-direction:column;min-width:0;overflow:hidden}
+main .k strong{min-width:0;margin:3px 0 0;letter-spacing:-.3px;overflow-wrap:anywhere}
+main .k u{display:block;margin:1px 0 0;font-size:12px}
+main .k em{display:block;margin-top:6px}
+small.pv{display:block;color:var(--mut);font-size:12px;line-height:1.45;margin-top:3px;font-weight:400}small.pv b{color:var(--ink);font-weight:600}.dpw small.pv{white-space:nowrap}
+#sec1 .kp{display:grid;gap:14px;align-items:stretch}#sec1 .k svg{margin-top:auto;width:100%}#sec1 .k{min-height:100%}
+/* ===== Responsive ทุกอุปกรณ์ ===== */
+html{-webkit-text-size-adjust:100%}body{font-size:clamp(14px,.3vw + 12.8px,17px);padding-bottom:env(safe-area-inset-bottom,0px)}
+header{padding-top:max(22px,env(safe-area-inset-top,0px));padding-left:max(clamp(14px,3vw,36px),env(safe-area-inset-left,0px));padding-right:max(clamp(14px,3vw,36px),env(safe-area-inset-right,0px))}
+img,svg{max-width:100%}.s{min-width:0}.tw{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}.tw>table{min-width:520px}
+@media(min-width:1700px){main,.top,#snav{max-width:1760px}body{font-size:17px}}
+@media(max-width:1100px){main .gauge{min-width:0}}
+@media(max-width:700px){
+ header{padding-bottom:18px;border-radius:0 0 20px 20px}.top{gap:10px}
+ .ctl{width:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.ctl::-webkit-scrollbar{display:none}.ctl>*{flex:none}
+ main{gap:12px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+ .s{padding:14px;border-radius:18px}.h{flex-wrap:wrap;gap:6px 10px}.h span{margin-left:auto}.h h2{font-size:16px}
+ .hero,.dn2{grid-template-columns:1fr}.dn2{justify-content:center}
+ #snav{padding:8px 12px}#snav a{padding:6px 12px}
+ .dpw{max-height:480px}
+}
+@media(max-width:380px){main .k strong{letter-spacing:-.6px}.chips,.tg{gap:4px}}
+@media(hover:none) and (pointer:coarse){.ctl button,.ctl input,#snav a,main .chip,.tg button,#vlist button,#vtop button,#vtop input{min-height:40px}}
+@media(max-height:560px) and (orientation:landscape){#v3{min-height:0;height:calc(100svh - 24px)}}
+@supports(height:100svh){#v3{height:min(86svh,760px)}}
 </style>
 </head>
 <body>
@@ -87,7 +166,7 @@ dialog button{font:inherit;padding:8px 14px;border-radius:8px;border:0;backgroun
   <div class="top">
     <div class="brand"><div class="logo" id="logo">✚</div><div><h1>Hospital Yantakhao Management Dashboard</h1><small>แดชบอร์ดบริหารจัดการโรงพยาบาล · ข้อมูลจาก HOSxP ผ่าน Supabase</small></div></div>
     <div class="ctl">
-      <button data-d="7" class="on">7 วันล่าสุด</button><button data-d="30">30 วัน</button><button data-d="90">90 วัน</button><button data-d="0">ปีนี้</button>
+      <button data-d="-1">วันนี้</button><button data-d="7" class="on">7 วันล่าสุด</button><button data-d="30">30 วัน</button><button data-d="90">90 วัน</button><button data-d="0">ปีนี้</button>
       <input type="date" id="from" aria-label="ตั้งแต่วันที่"><input type="date" id="to" aria-label="ถึงวันที่">
       <button id="go">โหลด</button><button id="to3d">3D ▾</button><button id="cfgb">ตั้งค่า</button>
     </div>
@@ -98,10 +177,10 @@ dialog button{font:inherit;padding:8px 14px;border-radius:8px;border:0;backgroun
 <main id="app"></main>
 <div style="max-width:1480px;margin:0 auto;padding:0 clamp(14px,3vw,36px) 36px"><section class="s" id="s3d" style="padding:18px"><div class="h"><b>3D</b><h2>แบบจำลองห้องบริการ 3 มิติ</h2><span>ห้องบัตร → ซักประวัติ 5 โต๊ะ → ห้องตรวจ 6 ห้อง → จ่ายยา 1 ช่อง</span></div>
 <div id="v3"><canvas id="vc" aria-label="แบบจำลอง 3 มิติเส้นทางการรับบริการ"></canvas>
-<div class="p" id="vtop"><div id="vkc"></div><div class="c3"><input type="date" id="vday" aria-label="วันที่ข้อมูล 3D"><button id="vgo">โหลด</button><button id="vrot">หมุนอัตโนมัติ</button></div></div>
+<div class="p" id="vtop"><div id="vkc"></div><div class="c3"><span class="now" style="background:#ffffff14;color:#e8f1f8"><span class="nd0"></span><b class="nowclk"></b></span><input type="date" id="vday" aria-label="วันที่ข้อมูล 3D"><button id="vgo">โหลด</button><button id="vrot">หมุนอัตโนมัติ</button></div></div>
 <div class="p" id="vlist"></div><div class="p" id="vdet"><div style="color:#8da4b8">คลิกอาคารหรือรายการสถานีเพื่อดูรายละเอียด</div></div>
 <div class="p" id="vhint">ลากเพื่อหมุน · Ctrl + ล้อเมาส์ หรือปุ่ม ＋ − เพื่อซูม · คลิกสถานีเพื่อดูข้อมูล</div><div class="p" id="vmsg"></div>
-<div id="vz"><button id="vzi" aria-label="ซูมเข้า">＋</button><button id="vzo" aria-label="ซูมออก">−</button><button id="vzr" aria-label="รีเซ็ตมุมมอง">⟲</button></div></div></section></div>
+<button id="vtg" aria-label="เปิด/ปิดแถบเครื่องมือ" title="เปิด/ปิดแถบเครื่องมือ">☰ ซ่อนแถบเครื่องมือ</button><div id="vz"><button id="vzi" aria-label="ซูมเข้า">＋</button><button id="vzo" aria-label="ซูมออก">−</button><button id="vzr" aria-label="รีเซ็ตมุมมอง">⟲</button></div></div></section></div>
 
 
 <dialog id="dlg">
@@ -116,49 +195,84 @@ dialog button{font:inherit;padding:8px 14px;border-radius:8px;border:0;backgroun
 <script>
 /* ===== ตั้งค่าครั้งเดียวตรงนี้ แล้วนำไฟล์ขึ้นเว็บ — ผู้ใช้ทุกคนจะเชื่อมต่ออัตโนมัติ ===== */
 const CONFIG={
-  url:'/api/sb', // เรียกผ่านเซิร์ฟเวอร์ของเรา (server.js) — คีย์จริงเก็บใน .env ไม่อยู่ในไฟล์นี้
+  url:'/api/sb', // เรียกผ่านตัวกลางของเรา (Netlify Function / Cloudflare Worker / server.js) — คีย์จริงอยู่ฝั่งเซิร์ฟเวอร์ ไม่อยู่ในไฟล์นี้
   key:'proxy',   // ค่าตัวแทน ไม่ใช่คีย์จริง
   logo:''
 };
 const AUTO=!/YOUR_/.test(CONFIG.url+CONFIG.key)&&CONFIG.url&&CONFIG.key;
-const TARGET={occ:85,wait:20,readmit:10,total:60}; // เป้าหมายส่วนแจ้งเตือน (แก้ได้)
+const TARGET={occ:85,wait:20,consult:15,readmit:10,total:60}; // เป้าหมายส่วนแจ้งเตือน (แก้ได้)
 const $=s=>document.querySelector(s),TB=['daily','hourly','department','pttype','er_triage','doctor_clinic'];
 const num=v=>+v||0,sum=(a,f)=>a.reduce((s,r)=>s+num(f(r)),0);
 const avg=(a,f)=>{const x=a.map(f).filter(v=>v!==null&&v!==''&&v!==undefined&&isFinite(+v)).map(Number);return x.length?x.reduce((s,v)=>s+v,0)/x.length:null};
-const fm=(v,d=0)=>v==null?'-':v.toLocaleString('th-TH',{maximumFractionDigits:d});
+const fm=(v,d=0)=>v==null?'-':v.toLocaleString('th-TH',{maximumFractionDigits:2}); // แสดงทศนิยมไม่เกิน 2 ตำแหน่ง (พารามิเตอร์ d ถูกละไว้)
+const fr=(v,d=0)=>v==null?'-':v.toLocaleString('th-TH',{maximumFractionDigits:d}); // ใช้เฉพาะตัวเลขบนแกนกราฟ
 const iso=d=>d.toISOString().slice(0,10),addD=(s,n)=>{const d=new Date(s);d.setDate(d.getDate()+n);return iso(d)};
 let store;try{store=localStorage}catch(e){store={getItem(){},setItem(){}}}
 const cfg=()=>AUTO?{u:CONFIG.url.replace(/\/$/,''),k:CONFIG.key,l:CONFIG.logo}:{u:(store.getItem('sb_u')||'').replace(/\/$/,''),k:store.getItem('sb_k')||'',l:store.getItem('sb_l')||''};
 
 const san=v=>typeof v==='string'?v.replace(/[<>"'`]/g,'’'):Array.isArray(v)?v.map(san):v&&typeof v==='object'?Object.fromEntries(Object.entries(v).map(([k,x])=>[k,san(x)])):v;
 async function get(t,a,b){
-  const c=cfg(),out=[];
+  const c=cfg(),out=[];let ord='key_id'; // เรียงตาม key_id ก่อน ถ้าตารางไม่มีคอลัมน์นี้ (HTTP 400) จะถอยไปเรียงตามวันที่
   for(let o=0;;o+=1000){
-    const r=await fetch(`${c.u}/rest/v1/hospital_${t}_stats?select=*&record_date=gte.${a}&record_date=lte.${b}&order=key_id`,
-      {headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Range-Unit':'items',Range:`${o}-${o+999}`}});
+    const u=od=>`${c.u}/rest/v1/hospital_${t}_stats?select=*&record_date=gte.${a}&record_date=lte.${b}&order=${od}`,hd={headers:{apikey:c.k,Authorization:'Bearer '+c.k,'Range-Unit':'items',Range:`${o}-${o+999}`}};
+    let r=await fetch(u(ord),hd);
+    if(r.status===400&&ord==='key_id'){ord='record_date';r=await fetch(u(ord),hd)} // ตารางผู้ป่วยในอาจไม่มี key_id ทำให้เดิมโหลดไม่ได้และแสดงว่าไม่พบข้อมูล
     if(!r.ok){let m='';try{m=(await r.text()).replace(/\s+/g,' ').slice(0,160)}catch(e){}throw new Error(`${t}: HTTP ${r.status}${m?' — '+m:''}`)}
     const j=san(await r.json());out.push(...j);if(j.length<1000)break;
   }
   return out;
 }
 function demo(a,b){
-  const D={};TB.forEach(t=>D[t]=[]);let i=0;const R=n=>Math.round(Math.random()*n);
+  const D={};TB.forEach(t=>D[t]=[]);
+  D.ward=[]; // [เพิ่มใหม่] ข้อมูลตัวอย่างหอผู้ป่วย (ผู้ป่วยใน)
+  D.ipd_pttype=[]; // [เพิ่มใหม่] ข้อมูลตัวอย่างสิทธิผู้ป่วยใน
+  let i=0;const R=n=>Math.round(Math.random()*n);
   for(let s=a;s<=b;s=addD(s,1),i++){
     const w=1+.15*Math.sin(i/9);
     D.daily.push({record_date:s,opd_daily_count:Math.round(230*w)+R(30),ipd_new_admit_daily:R(8)+14,ipd_discharged_daily:R(8)+13,ipd_avg_length_of_stay:3.5+Math.random(),ipd_current_beds:Math.round(60*w),ipd_total_beds:80,opd_his_income:Math.round(420e3*w),ipd_his_discharge_income:Math.round(260e3*w),er_his_income:Math.round(60e3*w),readmit_28days_pct:6+Math.random()*3,avg_wait_reg_to_triage:8+R(4),avg_wait_for_doctor:22+R(8),avg_doctor_consult_time:11+R(5),avg_wait_for_pharmacy:14+R(6),avg_total_process_time:55+R(15)});
     D.hourly.push({record_date:s,patient_type:'ER',time_hour:'08:00',service_count:R(15)+25});
-    [['อายุรกรรม',70],['กุมารเวช',45],['ศัลยกรรม',35],['สูติ-นรีเวช',30]].forEach(([d,n])=>D.department.push({record_date:s,department:d,visit_count:n+R(15)}));
-    [['UC',.6],['ประกันสังคม',.25],['ชำระเงินเอง',.15]].forEach(([d,p])=>D.pttype.push({record_date:s,pttype_name:d,his_income:Math.round(300e3*p*w)}));
+    // [แก้ไข] ข้อมูลตัวอย่างแผนก: เพิ่มรหัสแผนก รายรับ เบิกตามสิทธิ และชำระเอง เพื่อให้การ์ดรายรับมีข้อมูลทดลอง
+    [['อายุรกรรม',70,'001'],['กุมารเวช',45,'002'],['ศัลยกรรม',35,'003'],['สูติ-นรีเวช',30,'004']].forEach(([d,n,c])=>{ // วนแต่ละแผนก (ชื่อ, ฐานจำนวนผู้ป่วย, รหัสแผนก)
+      const v=n+R(15); // จำนวนผู้ป่วยของวันนั้น (เหมือนเดิม)
+      const inc=v*320; // รายรับตัวอย่าง = จำนวนผู้ป่วย × 320 บาท
+      const paid=Math.round(inc*(.04+Math.random()*.1)); // ส่วนที่ผู้ป่วยชำระเอง สุ่ม 4-14% ของรายรับ
+      D.department.push({record_date:s,main_dep:c,department:d,visit_count:v,his_income:inc,uc_money:inc-paid,paid_money:paid}); // เพิ่มแถวข้อมูลตัวอย่าง
+    });
+    // [แก้ไข] ข้อมูลตัวอย่างสิทธิ: เพิ่มยอดเบิกตามสิทธิและชำระเอง
+    [['UC',.6],['ประกันสังคม',.25],['ชำระเงินเอง',.15]].forEach(([d,p])=>{ // วนแต่ละสิทธิ (ชื่อ, สัดส่วนรายรับ)
+      const inc=Math.round(300e3*p*w); // รายรับของสิทธินั้น (เหมือนเดิม)
+      const paid=d==='ชำระเงินเอง'?inc:Math.round(inc*.05); // สิทธิ "ชำระเงินเอง" ผู้ป่วยจ่ายทั้งหมด ส่วนอื่นจ่ายเอง 5%
+      D.pttype.push({record_date:s,pttype_name:d,his_income:inc,uc_money:inc-paid,paid_money:paid}); // เพิ่มแถวข้อมูลตัวอย่าง
+    });
+    // [เพิ่มใหม่] ข้อมูลตัวอย่างหอผู้ป่วยใน: รายรับตามจำนวนผู้ป่วยที่จำหน่าย
+    [['W1','ตึกผู้ป่วยใน 1',9,30],['W2','ตึกผู้ป่วยใน 2',8,30],['W3','หลังคลอด',2,20]].forEach(([c,nm,n,bd])=>{ // วนแต่ละหอ (รหัส, ชื่อ, ฐานจำนวนจำหน่าย)
+      const an=n+R(3); // จำนวนผู้ป่วยจำหน่ายของวันนั้น
+      const inc=an*14000; // รายรับตัวอย่าง = จำนวนจำหน่าย × 14,000 บาท
+      const paid=Math.round(inc*.05); // ผู้ป่วยชำระเอง 5%
+      D.ward.push({record_date:s,ward:c,ward_name:nm,bed_count:bd,bed_used:Math.min(bd,Math.round(bd*(.55+Math.random()*.4))),patient_count:an,discharge_an_count:an,his_income:inc,uc_money:inc-paid,paid_money:paid}); // เพิ่มแถวหอผู้ป่วย
+    });
+    // [เพิ่มใหม่] ข้อมูลตัวอย่างสิทธิผู้ป่วยใน
+    [['บัตรทอง',.55],['เบิกกรมบัญชีกลาง',.2],['ประกันสังคม',.15],['ชำระเงินเอง',.1]].forEach(([nm,p])=>{ // วนแต่ละสิทธิ (ชื่อ, สัดส่วน)
+      const inc=Math.round(120e3*p*w); // รายรับของสิทธินั้น
+      const paid=nm==='ชำระเงินเอง'?inc:Math.round(inc*.03); // ชำระเอง: ทั้งหมด หรือ 3%
+      D.ipd_pttype.push({record_date:s,pttype_name:nm,discharge_an_count:Math.max(1,Math.round(inc/14000)),his_income:inc,uc_money:inc-paid,paid_money:paid}); // เพิ่มแถวสิทธิผู้ป่วยใน
+    });
     [['Level 1',1],['Level 2',6],['Level 3',14],['Level 4',9],['Level 5',3]].forEach(([d,n],j)=>D.er_triage.push({record_date:s,triage_level_id:j+1,triage_level_name:d,patient_count:n+R(3)}));
     [['0033','นพ.สมชาย','กุมารเวชกรรม'],['0152','นพ.สมหญิง','อายุรกรรม'],['373','พญ.สมศรี','สูตินรีเวชกรรม']].forEach(([c,n,k])=>D.doctor_clinic.push({record_date:s,doctor_code:c,doctor_name:n,clinic_name:k,visit_count:R(20)+25,patient_count:R(15)+22,admit_count:R(4)}));
   }
+  D.bed_occupancy=D.ward.map(r=>({record_date:r.record_date,ward:r.ward,ward_name:r.ward_name,total_beds:r.bed_count,used_beds:r.bed_used})); // ตัวอย่างตาราง hospital_bed_occupancy_stats
   return D;
 }
 
-const sec=(n,t,s,body,cls='')=>`<section class="s ${cls}"><div class="h"><b>${n}</b><h2>${t}</h2><span>${s}</span></div>${body}</section>`;
+const sec=(n,t,s,body,cls='')=>`<section class="s ${cls}" id="sec${String(n).replace('.','_')}"><div class="h"><b>${n}</b><h2>${t}</h2><span>${s}</span></div>${body}</section>`;
 const spark=(pts,c,lb)=>{if(pts.length<2)return '';const v=pts.map(e=>e[1]),m=Math.max(...v),n=Math.min(...v),r=m-n||1,w=100/v.length;return `<svg viewBox="0 0 100 26" width="100%" height="26" preserveAspectRatio="none" aria-label="แนวโน้ม ${lb}"><polyline fill="none" stroke="${c}" stroke-width="1.8" vector-effect="non-scaling-stroke" points="${v.map((x,i)=>(i/(v.length-1)*100).toFixed(1)+','+(24-(x-n)/r*22).toFixed(1)).join(' ')}"/>${pts.map((e,i)=>`<rect class="hit" x="${(i*w).toFixed(2)}" y="0" width="${w.toFixed(2)}" height="26" data-tip="${esc(`<b>${fd(e[0])}</b><div class="tr"><span>${lb}</span><b>${fm(e[1],e[1]<100?1:0)}</b></div>`)}"/>`).join('')}</svg>`};
-const delta=(c,p,inv)=>{if(!p)return '<em>&nbsp;</em>';const d=(c-p)/p*100,g=inv?d<0:d>0;return `<em class="${g?'up':'dn'}">${d>=0?'▲':'▼'} ${fm(Math.abs(d),1)}% vs ช่วงก่อน</em>`};
-const kpi=(l,v,u,c,p,inv,sr,col='#0b7a8a')=>`<div class="k"><i>${l}</i><strong>${v}<u>${u}</u></strong>${delta(c,p,inv)}${sr?spark(sr,col,l):''}</div>`;
+const NARROW=()=>innerWidth<640; // จอแคบ (มือถือ)
+let LAST=null; // อาร์กิวเมนต์ render ล่าสุด ไว้วาดใหม่เมื่อขนาดจอข้ามจุดเปลี่ยน
+let CMP={len:1,pa:'',pb:''}; // ช่วงเปรียบเทียบ (จำนวนวัน + วันที่เริ่ม/สิ้นสุดของช่วงก่อนหน้า) ตั้งค่าใหม่ทุกครั้งที่ค้นหา
+const cmpDate=t=>t?`${t.slice(8)}/${t.slice(5,7)}/${+t.slice(0,4)+543}`:'';
+const cmpTxt=()=>`เทียบ ${CMP.len} วัน · ${cmpDate(CMP.pa)}${CMP.len>1?' – '+cmpDate(CMP.pb):''}`;
+const delta=(c,p,inv,u='')=>{if(!p)return '<em>&nbsp;</em>';const d=(c-p)/p*100,g=inv?d<0:d>0;return `<em class="${g?'up':'dn'}">${d>=0?'▲':'▼'} ${fm(Math.abs(d),1)}% vs ช่วงก่อน</em><small class="pv">ช่วงก่อน <b>${fm(p)}</b> ${u}<br>${cmpTxt()}</small>`};
+const kpi=(l,v,u,c,p,inv,sr,col='#0b7a8a')=>`<div class="k"><i>${l}</i><strong>${v}<u>${u}</u></strong>${delta(c,p,inv,u)}${sr?spark(sr,col,l):''}</div>`;
 const bars=(rows,unit)=>{const m=Math.max(...rows.map(r=>r[1]),1);return rows.length?rows.map(r=>`<div class="bar"><span>${r[0]}</span><div><u style="width:${r[1]/m*100}%;background:${r[2]||'linear-gradient(90deg,#0b7a8a,#14a3a8)'}"></u></div><span>${fm(r[1],unit?1:0)}${unit||''}</span></div>`).join(''):'<div class="nd">ไม่มีข้อมูล</div>'};
 const group=(a,kf,vf)=>{const m={};a.forEach(r=>{const k=kf(r);m[k]=(m[k]||0)+num(vf(r))});return Object.entries(m).sort((x,y)=>y[1]-x[1])};
 const donut=(parts,cols,center,size=132,o={})=>{
@@ -167,17 +281,17 @@ const donut=(parts,cols,center,size=132,o={})=>{
     tip=esc(`<b>${p[0]}</b><div class="tr"><span><i style="background:${c}"></i>สัดส่วน</span><b>${fm(l,1)}%</b></div>${o.fmtv?`<div class="tr"><span>มูลค่า</span><b>${o.fmtv(p[1])}</b></div>`:''}`),
     e=l>0?`<circle class="dsg" cx="21" cy="21" r="${R}" fill="none" stroke="${c}" stroke-width="6" stroke-linecap="butt" stroke-dasharray="${vis.toFixed(3)} ${(100-vis).toFixed(3)}" stroke-dashoffset="${(off-gap/2).toFixed(3)}" data-tip="${tip}" data-i="${i}"/>`:'';off-=l;return e}).join('');
   const tgt=o.target!=null?(()=>{const a=o.target/100*2*Math.PI-Math.PI/2,x1=21+Math.cos(a)*12.2,y1=21+Math.sin(a)*12.2,x2=21+Math.cos(a)*19.2,y2=21+Math.sin(a)*19.2;return `<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}" stroke="${dark?'#f5b441':'#0e2235'}" stroke-width="1.1" stroke-linecap="round" data-tip="${esc(`<b>เป้าหมาย</b><div class="tr"><span>ไม่เกิน</span><b>${o.target}%</b></div>`)}"/>`})():'';
-  return `<svg viewBox="0 0 42 42" width="${size}" height="${size}" role="img" aria-label="${esc(o.label||'แผนภูมิโดนัท')}: ${esc(parts.map(p=>p[0]+' '+fm(p[1]/T*100,1)+'%').join(', '))}"><circle cx="21" cy="21" r="${R}" fill="none" stroke="${trk}" stroke-width="6"/>${seg}${tgt}<text x="21" y="${o.sub?21.6:23}" text-anchor="middle" font-size="6.6" font-weight="700" fill="${tx}" style="letter-spacing:-.2px">${center}</text>${o.sub?`<text x="21" y="27" text-anchor="middle" font-size="2.9" fill="${ms}">${o.sub}</text>`:''}</svg>`};
+  return `<svg viewBox="0 0 42 42" width="${size}" height="${size}" role="img" aria-label="${esc(o.label||'แผนภูมิโดนัท')}: ${esc(parts.map(p=>p[0]+' '+fm(p[1]/T*100,1)+'%').join(', '))}"><circle cx="21" cy="21" r="${R}" fill="none" stroke="${trk}" stroke-width="6"/>${seg}${tgt}<text x="21" y="${o.sub?21.6:23}" text-anchor="middle" font-size="${String(center).length>6?Math.max(3.4,27/String(center).length):6.6}" font-weight="700" fill="${tx}" style="letter-spacing:-.2px">${center}</text>${o.sub?`<text x="21" y="27" text-anchor="middle" font-size="2.9" fill="${ms}">${o.sub}</text>`:''}</svg>`};
 const dlegend=(parts,cols,fmtv,dark)=>{const T=parts.reduce((s,p)=>s+p[1],0)||1;return `<div class="dl">${parts.map((p,i)=>`<div><i style="background:${cols[i%cols.length]}"></i><span>${p[0]}</span>${fmtv?`<b>${fmtv(p[1])}</b>`:'<b></b>'}<em>${fm(p[1]/T*100,1)}%</em></div>`).join('')}</div>`};
 const PAL=['#0b7a8a','#e9a23b','#2f9e6b','#e2563c','#7c6bd6'];
 
 function chart(keys,series,tgt,note){
-  const W=620,H=220,L=44,mx=Math.max(...series.flatMap(s=>s.v),tgt||0,1),x=i=>L+i*(W-L-12)/Math.max(keys.length-1,1),y=v=>H-28-v/mx*(H-48);
-  const grid=[0,.5,1].map(f=>`<line x1="${L}" x2="${W-12}" y1="${y(mx*f)}" y2="${y(mx*f)}" stroke="#dce6ee" stroke-dasharray="3 4"/><text x="${L-6}" y="${y(mx*f)+4}" font-size="10" text-anchor="end" fill="#5d7186">${fm(mx*f)}</text>`).join('');
+  const W=NARROW()?340:620,H=220,mx=Math.max(...series.flatMap(s=>s.v),tgt||0,1),L=Math.max(44,String(fr(mx)).length*5.8+10),span=W-L-12,few=keys.length<=7,x=i=>few?L+(i+.5)*span/keys.length:L+i*span/Math.max(keys.length-1,1),y=v=>H-28-v/mx*(H-48); // ข้อมูลน้อย (≤7 จุด) วางกึ่งกลางกราฟ
+  const grid=[0,.5,1].map(f=>`<line x1="${L}" x2="${W-12}" y1="${y(mx*f)}" y2="${y(mx*f)}" stroke="#dce6ee" stroke-dasharray="3 4"/><text x="${L-6}" y="${y(mx*f)+4}" font-size="10" text-anchor="end" fill="#5d7186">${fr(mx*f)}</text>`).join('');
   const area=`<polygon fill="#0b7a8a" opacity=".1" points="${x(0)},${y(0)} ${series[0].v.map((v,i)=>x(i)+','+y(v)).join(' ')} ${x(keys.length-1)},${y(0)}"/>`;
   const tg=tgt==null?'':`<line x1="${L}" x2="${W-12}" y1="${y(tgt)}" y2="${y(tgt)}" stroke="#e2563c" stroke-width="1.5" stroke-dasharray="6 4"/><text x="${W-14}" y="${y(tgt)-5}" font-size="10" text-anchor="end" fill="#e2563c">เป้าหมาย ${tgt}</text>`;
   const ln=series.map(s=>`<polyline fill="none" stroke="${s.c}" stroke-width="2.6" stroke-linejoin="round" points="${s.v.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`+(keys.length>40?'':s.v.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="#fff" stroke="${s.c}" stroke-width="2"/>`).join(''))).join('');
-  const bw=(W-L-12)/Math.max(keys.length-1,1),hits=keys.map((k,i)=>`<rect class="hit" x="${Math.max(x(i)-bw/2,L)}" y="8" width="${keys.length>1?bw:W-L-12}" height="${H-34}" data-tip="${tipOf(k,series,i,{tgt,note})}"/>`).join('');
+  const bw=few?span/keys.length:span/Math.max(keys.length-1,1),hits=keys.map((k,i)=>`<rect class="hit" x="${Math.max(x(i)-bw/2,L)}" y="8" width="${bw}" height="${H-34}" data-tip="${tipOf(k,series,i,{tgt,note})}"/>`).join('');
   const step=keys.length<=8?1:Math.ceil(keys.length/8),tx=keys.map((k,i)=>i%step?'':`<text x="${x(i)}" y="${H-8}" font-size="10" text-anchor="middle" fill="#5d7186">${lab(k)}</text>`).join('');
   return `<div class="lg">${series.map(s=>`<span><i style="background:${s.c}"></i>${s.n}</span>`).join('')}</div><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="กราฟแนวโน้ม แตะหรือชี้เพื่อดูรายละเอียด">${grid}${tg}${area}${ln}${hits}${tx}</svg>`;
 }
@@ -198,8 +312,8 @@ function tipOf(k,series,i,o={}){
 const DOWF=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],DOW=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],lab=k=>k.length>7?(SHORT&&/^\d{4}-\d{2}-\d{2}$/.test(k)?DOW[new Date(k+'T00:00:00').getDay()]+' ':'')+k.slice(8)+'/'+k.slice(5,7):k.length==7?k.slice(5)+'/'+k.slice(2,4):k;
 let SHORT=false;
 function cols(keys,series,stack,dec=0,note){
-  const W=620,H=230,L=44,n=keys.length||1,tot=keys.map((_,i)=>stack?series.reduce((s,x)=>s+x.v[i],0):Math.max(...series.map(x=>x.v[i]))),mx=Math.max(...tot,1),y=v=>H-28-v/mx*(H-50),bw=(W-L-12)/n,g=bw*.8/series.length;
-  const grid=[0,.5,1].map(f=>`<line x1="${L}" x2="${W-12}" y1="${y(mx*f)}" y2="${y(mx*f)}" stroke="#dce6ee" stroke-dasharray="3 4"/><text x="${L-6}" y="${y(mx*f)+4}" font-size="10" text-anchor="end" fill="#5d7186">${fm(mx*f,dec)}</text>`).join('');
+  const W=NARROW()?340:620,H=230,n=keys.length||1,tot=keys.map((_,i)=>stack?series.reduce((s,x)=>s+x.v[i],0):Math.max(...series.map(x=>x.v[i]))),mx=Math.max(...tot,1),L=Math.max(44,String(fr(mx,dec)).length*5.8+10),y=v=>H-28-v/mx*(H-50),bw=(W-L-12)/n,g=bw*.8/series.length;
+  const grid=[0,.5,1].map(f=>`<line x1="${L}" x2="${W-12}" y1="${y(mx*f)}" y2="${y(mx*f)}" stroke="#dce6ee" stroke-dasharray="3 4"/><text x="${L-6}" y="${y(mx*f)+4}" font-size="10" text-anchor="end" fill="#5d7186">${fr(mx*f,dec)}</text>`).join('');
   const bars=keys.map((k,i)=>{let acc=0;return series.map((s,j)=>{const v=s.v[i],x=L+i*bw+(stack?bw*.15:bw*.1+j*g),yy=stack?y(acc+v):y(v);acc+=v;return `<rect x="${x}" y="${yy}" width="${stack?bw*.7:g*.92}" height="${Math.max(y(0)-y(v),0)}" rx="2" fill="${s.c}"/>`}).join('')}).join('');
   const hits=keys.map((k,i)=>`<rect class="hit" x="${L+i*bw}" y="8" width="${bw}" height="${H-34}" data-tip="${tipOf(k,series,i,{stack,dec,note})}"/>`).join('');
   const st=n<=10?1:Math.ceil(n/10),tx=keys.map((k,i)=>i%st?'':`<text x="${L+i*bw+bw/2}" y="${H-8}" font-size="10" text-anchor="middle" fill="#5d7186">${lab(k)}</text>`).join('');
@@ -219,7 +333,7 @@ function deepCharts(cur,d,keys,keyf,erR){
   return `<div class="h" style="grid-column:span 12;margin:10px 0 -4px"><h2 style="font-size:18px">กราฟเชิงลึก</h2><span>Deep-dive Analytics</span></div>`+
    W(11,'อัตราครองเตียงเทียบเป้าหมาย (%)','Bed Occupancy vs Target',chart(keys,[{n:'อัตราครองเตียง',c:'#0b7a8a',u:'%',v:keys.map((_,i)=>{const r=d.filter(x=>keyf(x.record_date)===keys[i]),t=avg(r,x=>x.ipd_total_beds);return t?(avg(r,x=>x.ipd_current_beds)||0)/t*100:0})}],TARGET.occ,'ค่าเฉลี่ยทั้งเดือน'))+
    W(12,'รับใหม่ เทียบ จำหน่าย','Admission vs Discharge',cols(keys,[{n:'รับใหม่',c:'#2f9e6b',u:' ราย',v:mvS(d,r=>r.ipd_new_admit_daily)},{n:'จำหน่าย',c:'#7c6bd6',u:' ราย',v:mvS(d,r=>r.ipd_discharged_daily)}],false,0,'ผลรวมทั้งเดือน'))+
-   W(13,'รายได้แยกประเภท (ล้านบาท)','Revenue Breakdown',cols(keys,[{n:'OPD',c:'#0b7a8a',u:' ล้านบาท',v:mvS(d,O).map(x=>x/1e6)},{n:'IPD',c:'#2f9e6b',u:' ล้านบาท',v:mvS(d,r=>r.ipd_his_discharge_income).map(x=>x/1e6)},{n:'ER',c:'#e2563c',u:' ล้านบาท',v:mvS(d,E).map(x=>x/1e6)}],true,2,'ผลรวมทั้งเดือน'))+
+   W(13,'รายได้แยกประเภท (บาท)','Revenue Breakdown',cols(keys,[{n:'OPD',c:'#0b7a8a',u:' บาท',v:mvS(d,O)},{n:'IPD',c:'#2f9e6b',u:' บาท',v:mvS(d,r=>r.ipd_his_discharge_income)},{n:'ER',c:'#e2563c',u:' บาท',v:mvS(d,E)}],true,0,'ผลรวมทั้งเดือน'))+
    W(14,'เวลารอแต่ละขั้นตอน (นาที)','Waiting Time by Stage',cols(keys,[{n:'ลงทะเบียน→คัดกรอง',c:'#8aa0b3',u:' นาที',v:mvA(r=>r.avg_wait_reg_to_triage)},{n:'รอพบแพทย์',c:'#e9a23b',u:' นาที',v:mvA(r=>r.avg_wait_for_doctor)},{n:'ตรวจ',c:'#0b7a8a',u:' นาที',v:mvA(r=>r.avg_doctor_consult_time)},{n:'รอรับยา',c:'#7c6bd6',u:' นาที',v:mvA(r=>r.avg_wait_for_pharmacy)}],true,1,'ค่าเฉลี่ยทั้งเดือน'))+
    W(15,'ช่วงเวลาที่ผู้ป่วยมาใช้บริการ','Hourly Arrival Profile',chart(H24.map(h=>String(h).padStart(2,'0')+':00'),[{n:'OPD',c:'#0b7a8a',u:' ราย/ชม.',v:hp('OPD')},{n:'ER',c:'#e2563c',u:' ราย/ชม.',v:hp('ER')}]))+
    W(16,'OPD เฉลี่ยตามวันในสัปดาห์','Weekday Pattern',bars(wk.map(w=>[w[0],w[1],'linear-gradient(90deg,#0b7a8a,#14a3a8)'])))+
@@ -229,27 +343,214 @@ function deepCharts(cur,d,keys,keyf,erR){
 
 const fdt=s=>new Date(s+'T00:00:00').toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric'});
 function banner(a,b,pa,pb,n,seven,have){const $r=$('#rb');$r.innerHTML=`<div>${seven?'<span class="pill">7 วันล่าสุด</span>':`<span class="pill">${n} วัน</span>`}<b>${fdt(a)} – ${fdt(b)}</b><span>เปรียบเทียบกับ ${fdt(pa)} – ${fdt(pb)}</span>${have!=null?`<span>มีข้อมูล ${have}/${n} วัน</span>`:''}<span style="margin-left:auto;font-size:12px">ข้อมูลล่าสุด ${fdt(b)}</span></div>`}
+/* ===== การ์ดรายรับแยกตามแผนก/หอผู้ป่วย และสิทธิการรักษา (ผู้ป่วยนอก / ผู้ป่วยใน / รวม) =====
+   ผู้ป่วยนอก: hospital_department_stats (ตามแผนก) และ hospital_pttype_stats (ตามสิทธิ)
+   ผู้ป่วยใน : hospital_ward_stats (รายรับตามหอผู้ป่วย), hospital_bed_occupancy_stats (เตียงรายหอ) และ hospital_ipd_pttype_stats (ตามสิทธิ)
+   รายรับของแต่ละแถวแบ่งเป็น 3 ส่วน: เบิกตามสิทธิ (uc_money) / ผู้ป่วยชำระเอง (paid_money) / ยอดที่ไม่ระบุแหล่งจ่าย (ส่วนที่เหลือจาก his_income) */
+
+const DPC={uc:'#0b7a8a',paid:'#e9a23b',oth:'#8aa0b3'}; // สีของแต่ละส่วนในแถบสัดส่วน
+const DPN={uc:'เบิกตามสิทธิ',paid:'ผู้ป่วยชำระเอง',oth:'ยอดที่ไม่ระบุแหล่งจ่าย'}; // ชื่อของแต่ละส่วน ใช้ในคำอธิบายสีและ tooltip
+let DPV='dept'; // มุมมองปัจจุบัน: 'dept' = ตามแผนก/หอผู้ป่วย, 'pt' = ตามสิทธิการรักษา
+let DPT='opd'; // ประเภทผู้ป่วยปัจจุบัน: 'opd' = ผู้ป่วยนอก, 'ipd' = ผู้ป่วยใน, 'all' = รวมทั้งหมด
+let IPDERR={}; // เก็บข้อความ error จริงตอนโหลดตารางผู้ป่วยใน ไว้แสดงในการ์ด
+let DPS={dept:[],pt:[],ward:[],ipt:[]}; // ข้อมูลดิบช่วงที่เลือก (แผนก, สิทธิ OPD, หอผู้ป่วย, สิทธิ IPD)
+let DPQ={dept:[],pt:[],ward:[],ipt:[]}; // ข้อมูลดิบช่วงก่อนหน้า ใช้เทียบ %
+
+function dpRows(src,byD,pt){ // ปรับข้อมูลดิบจากหลายตารางให้เป็นรูปแบบเดียวกัน {k,n,inc,uc,paid,an}
+  const out=[]; // อาร์เรย์ผลลัพธ์
+  const tag=t=>pt==='all'?t:''; // ใส่ป้าย [นอก]/[ใน] นำหน้าชื่อเฉพาะตอนดูรวม เพื่อแยกแผนกกับหอผู้ป่วย
+  const mk=(k,n,r)=>({k:k,n:n,inc:num(r.his_income),uc:num(r.uc_money),paid:num(r.paid_money),an:num(r.discharge_an_count)}); // สร้างแถวมาตรฐาน (an = จำนวนผู้ป่วยจำหน่าย มีเฉพาะผู้ป่วยใน)
+  if(byD){ // มุมมองตามแผนก/หอผู้ป่วย
+    if(pt!=='ipd')(src.dept||[]).forEach(r=>out.push(mk('o:'+(r.main_dep||r.department||'ไม่ระบุ'),tag('[นอก] ')+(r.department||'ไม่ระบุ'),r))); // แผนกผู้ป่วยนอก (คีย์ใช้รหัสแผนก)
+    if(pt!=='opd')(src.ward||[]).forEach(r=>out.push(mk('i:'+(r.ward||r.ward_name||'ไม่ระบุ'),tag('[ใน] ')+(r.ward_name||r.wardname||r.ward||'ไม่ระบุ'),r))); // หอผู้ป่วยใน (คีย์ใช้รหัสหอ)
+  }else{ // มุมมองตามสิทธิการรักษา
+    const f=r=>out.push(mk(r.pttype_name||'ไม่ระบุ',r.pttype_name||'ไม่ระบุ',r)); // แถวสิทธิ: คีย์และชื่อใช้ชื่อสิทธิ (OPD กับ IPD ที่ชื่อเดียวกันจะรวมกันตอนดูรวม)
+    if(pt!=='ipd')(src.pt||[]).forEach(f); // สิทธิผู้ป่วยนอก
+    if(pt!=='opd')(src.ipt||[]).forEach(f); // สิทธิผู้ป่วยใน
+  }
+  return out; // คืนค่าแถวมาตรฐานทั้งหมด
+}
+
+function dpAgg(list){ // รวมแถวมาตรฐานที่คีย์เดียวกันให้เป็นแถวเดียว
+  const m={}; // ตัวเก็บผลรวมแยกตามคีย์
+  list.forEach(x=>{ // วนทุกแถวมาตรฐาน
+    const o=m[x.k]||(m[x.k]={k:x.k,n:x.n,mx:-1,inc:0,uc:0,paid:0,an:0}); // หยิบกลุ่มเดิม หรือสร้างกลุ่มใหม่
+    if(x.inc>o.mx){o.mx=x.inc;o.n=x.n;} // เก็บชื่อจากแถวที่รายรับสูงสุดของกลุ่ม (กันชื่อที่พิมพ์เพี้ยน)
+    o.inc+=x.inc; // สะสมรายรับรวม
+    o.uc+=x.uc; // สะสมส่วนที่เบิกตามสิทธิ
+    o.paid+=x.paid; // สะสมส่วนที่ผู้ป่วยชำระเอง
+    o.an+=x.an; // สะสมจำนวนผู้ป่วยจำหน่าย
+  });
+  return Object.values(m); // คืนค่าเป็นอาร์เรย์ของกลุ่ม
+}
+
+function dpRender(){ // ฟังก์ชันวาดเนื้อหาการ์ดทั้งหมด (เรียกซ้ำเมื่อสลับประเภทผู้ป่วยหรือมุมมอง)
+  const box=$('#dpc'); // หากล่องของการ์ดที่สร้างไว้ใน render()
+  if(!box)return; // ถ้ายังไม่มีกล่อง ให้ออกจากฟังก์ชัน
+  const byD=DPV==='dept'; // true = แถวเป็นแผนก/หอผู้ป่วย, false = แถวเป็นสิทธิ
+  const pt=DPT; // ประเภทผู้ป่วยปัจจุบัน (ย่อชื่อ)
+  const rl=byD?(pt==='ipd'?'หอผู้ป่วย':pt==='all'?'แผนก / หอผู้ป่วย':'แผนก'):'สิทธิการรักษา'; // ป้ายชื่อของแถว ใช้ในหัวตาราง
+  const unit=byD?(pt==='ipd'?'หอผู้ป่วย':pt==='all'?'แผนก/หอ':'แผนก'):'สิทธิ'; // หน่วยนับ ใช้ในแถว "อื่นๆ"
+  const showAN=pt==='ipd'; // แสดงคอลัมน์ "รายรับ/AN" เฉพาะมุมมองผู้ป่วยใน
+  const all=dpAgg(dpRows(DPS,byD,pt)).filter(o=>o.inc>0).sort((a,b)=>b.inc-a.inc); // รวมข้อมูล ตัดแถวที่ไม่มีรายรับ เรียงมาก->น้อย
+  const ipdMiss=pt!=='opd'&&!(byD?DPS.ward:DPS.ipt).length; // true = ต้องการข้อมูลผู้ป่วยใน แต่ไม่มีข้อมูลเลย
+
+  const b1='<div class="tg">'+ // เริ่มแถวปุ่มเลือกประเภทผู้ป่วย
+    [['opd','ผู้ป่วยนอก'],['ipd','ผู้ป่วยใน'],['all','รวมทั้งหมด']].map(x=>`<button data-dpt="${x[0]}" class="${pt===x[0]?'on':''}">${x[1]}</button>`).join('')+ // ปุ่มทั้งสาม (ไฮไลต์ปุ่มที่ใช้งาน)
+    '</div>'; // ปิดแถวปุ่มประเภทผู้ป่วย
+  const b2='<div class="tg" style="margin-top:8px">'+ // เริ่มแถวปุ่มสลับมุมมอง
+    `<button data-dpv="dept" class="${byD?'on':''}">${pt==='ipd'?'ดูตามหอผู้ป่วย':pt==='all'?'ดูตามแผนก/หอผู้ป่วย':'ดูตามแผนก'}</button>`+ // ปุ่มมุมมองแรก ชื่อเปลี่ยนตามประเภทผู้ป่วย
+    `<button data-dpv="pt" class="${byD?'':'on'}">ดูตามสิทธิการรักษา</button>`+ // ปุ่มดูตามสิทธิการรักษา
+    `<span>หน่วย: บาท · แสดงทั้งหมด ${all.length} ${unit} · ${cmpTxt()}</span></div>`; // ข้อความหน่วยและข้อจำกัด
+  const warn=ipdMiss?'<div class="nd" style="margin:10px 0">ไม่พบข้อมูลผู้ป่วยใน — ตรวจว่ามีข้อมูลในช่วงวันที่ที่เลือก และตาราง <b>hospital_ward_stats</b> / <b>hospital_ipd_pttype_stats</b> เปิดสิทธิ์อ่าน (RLS policy) ให้ anon แล้ว'+(Object.keys(IPDERR).length?'<br><small style="color:#b42318">สาเหตุที่โหลดไม่ได้: '+Object.values(IPDERR).map(esc).join(' | ')+'</small>':'')+'</div>':''; // ข้อความเตือนเมื่อไม่มีข้อมูลผู้ป่วยใน
+  const note=(pt!=='opd'&&!ipdMiss)?'<p style="margin:8px 0 0;color:var(--mut);font-size:12px">ผู้ป่วยใน: นับตามผู้ป่วยที่จำหน่ายในช่วงวันที่ที่เลือก (ระดับหอผู้ป่วย/สิทธิ)</p>':''; // หมายเหตุวิธีนับรายรับผู้ป่วยใน
+  if(!all.length){ // กรณีไม่มีข้อมูลรายรับในช่วงที่เลือก
+    box.innerHTML=b1+b2+(warn||'<div class="nd">ไม่มีข้อมูลรายรับในช่วงวันที่ที่เลือก</div>'); // แสดงปุ่มพร้อมข้อความ (สาเหตุผู้ป่วยในถ้าเกี่ยวข้อง)
+    return; // จบการทำงาน
+  }
+
+  const pv={}; // ยอดรายรับช่วงก่อนหน้า แยกตามคีย์แถว
+  dpAgg(dpRows(DPQ,byD,pt)).forEach(o=>{pv[o.k]=o.inc;}); // เก็บยอดช่วงก่อนหน้าของแต่ละแถว
+  const T=sum(all,o=>o.inc); // รายรับรวมช่วงปัจจุบัน
+  const TP=sum(all,o=>pv[o.k]||0); // รายรับรวมช่วงก่อนหน้า (เฉพาะแถวที่มีรายรับตอนนี้ เพื่อเทียบอย่างเป็นธรรม)
+  const UC=sum(all,o=>o.uc); // รวมส่วนที่เบิกตามสิทธิ
+  const PD=sum(all,o=>o.paid); // รวมส่วนที่ผู้ป่วยชำระเอง
+  const AN=sum(all,o=>o.an); // รวมจำนวนผู้ป่วยจำหน่าย
+  const oth=o=>Math.max(o.inc-o.uc-o.paid,0); // ส่วน "อื่นๆ" = รายรับ - เบิกตามสิทธิ - ชำระเอง (ไม่ติดลบ)
+
+  const rows=all; // แสดงทุกแผนก/หอผู้ป่วย/สิทธิ ไม่ตัดแถวและไม่รวมเป็น "อื่นๆ"
+  const mx=Math.max(...rows.map(o=>o.inc),1); // รายรับสูงสุดในตาราง ใช้เป็น 100% ของความยาวแถบ
+
+  const dchg=(v,p)=>{ // ฟังก์ชันสร้างข้อความ % เปลี่ยนแปลงเทียบช่วงก่อน (v=ปัจจุบัน, p=ก่อนหน้า)
+    if(!p)return '<span style="color:var(--mut)">-</span>'; // ไม่มีข้อมูลช่วงก่อน แสดงขีด
+    const up=v>=p; // เพิ่มขึ้นหรือเท่าเดิมหรือไม่
+    const pct=fm(Math.abs((v-p)/p*100),1); // คำนวณ % ความต่าง (ทศนิยม 1 ตำแหน่ง)
+    return `<span class="${up?'up':'dn'}">${up?'▲':'▼'} ${pct}%</span><small class="pv">ก่อนหน้า ${fm(p)} บาท</small>`; // เขียว ▲ เมื่อเพิ่ม, แดง ▼ เมื่อลด + ยอดช่วงก่อน
+  };
+  const kc=(l,v,s)=>`<div class="k"><i>${l}</i><strong style="font-size:18px;line-height:1.5">${v}</strong><em style="color:var(--mut)">${s}</em></div>`; // สร้างช่องสรุปแบบข้อความ (หัวข้อ, ค่า, คำอธิบาย)
+  const mil=v=>`${fm(v)} บาท`; // แสดงเป็นบาทเต็มจำนวน
+  const perAN=o=>o.an?fm(o.inc/o.an):'-'; // รายรับเฉลี่ยต่อผู้ป่วยจำหน่าย 1 ราย (AN)
+
+  const bar=o=>{ // ฟังก์ชันสร้างแถบสัดส่วน 3 ส่วนของหนึ่งแถว
+    const parts=[['uc',o.uc],['paid',o.paid],['oth',oth(o)]]; // ส่วนที่จะวาด (คีย์สี, ยอด)
+    const tot=sum(parts,p=>p[1])||1; // ยอดรวมของทุกส่วน (กันหารศูนย์)
+    const segs=parts.map(p=>{ // วนสร้างทีละส่วน
+      if(p[1]<=0)return ''; // ไม่มียอด ไม่ต้องวาด
+      const tip=esc(`<b>${o.n}</b><div class="tr"><span><i style="background:${DPC[p[0]]}"></i>${DPN[p[0]]}</span><b>${fm(p[1])} บาท<em>${fm(p[1]/tot*100,1)}%</em></b></div>`); // ข้อความ tooltip (ชื่อแถว, ส่วน, ยอด, %)
+      return `<u style="display:block;height:100%;width:${p[1]/tot*100}%;background:${DPC[p[0]]}" data-tip="${tip}"></u>`; // ส่วนสีกว้างตามสัดส่วน
+    }).join(''); // รวมทุกส่วนเป็นข้อความเดียว
+    return `<div style="background:#eaf0f5;border-radius:99px;height:12px;overflow:hidden;min-width:120px"><div style="display:flex;height:100%;width:${o.inc/mx*100}%">${segs}</div></div>`; // รางสีเทา + แถบที่ยาวตามรายรับเทียบแถวสูงสุด
+  };
+
+  const body=rows.map((o,i)=> // สร้างแถวของตารางทีละแถวข้อมูล
+    `<tr><td><span class="rk${i<3?' t':''}">${i+1}</span><b>${esc(o.n)}</b></td>`+ // คอลัมน์ 1: ชื่อแถว (แผนก/หอผู้ป่วย/สิทธิ)
+    `<td style="text-align:left">${bar(o)}</td>`+ // คอลัมน์ 2: แถบสัดส่วน
+    `<td>${fm(o.inc)}</td>`+ // คอลัมน์ 3: รายรับ (บาท)
+    `<td>${fm(o.uc)}</td>`+ // คอลัมน์ 4: เบิกตามสิทธิ (บาท)
+    `<td>${fm(o.paid)}</td>`+ // คอลัมน์ 5: ผู้ป่วยชำระเอง (บาท)
+    (showAN?`<td>${perAN(o)}</td>`:'')+ // คอลัมน์ (เฉพาะผู้ป่วยใน): รายรับต่อ AN
+    `<td>${fm(o.inc/T*100,1)}%</td>`+ // คอลัมน์ถัดไป: % ของรายรับทั้งหมด
+    `<td>${dchg(o.inc,pv[o.k]||0)}</td></tr>` // คอลัมน์สุดท้าย: เทียบช่วงก่อน
+  ).join(''); // รวมทุกแถวเป็นข้อความเดียว
+  const tbl='<div class="dpw"><table>'+ // กล่องเลื่อนแนวนอน (กันล้นจอมือถือ) + เริ่มตาราง
+    `<tr><th>${rl}</th>`+ // หัวคอลัมน์: ชื่อแถว
+    '<th style="text-align:left;width:26%">สัดส่วนรายรับ</th>'+ // หัวคอลัมน์: แถบสัดส่วน
+    '<th>รายรับ</th><th>เบิกตามสิทธิ</th><th>ชำระเอง</th>'+ // หัวคอลัมน์ตัวเลขหลัก
+    (showAN?'<th>รายรับ/AN</th>':'')+ // หัวคอลัมน์รายรับต่อ AN (เฉพาะผู้ป่วยใน)
+    '<th>% ทั้งหมด</th><th>เทียบช่วงก่อน ('+CMP.len+' วัน)</th></tr>'+ // หัวคอลัมน์ที่เหลือ
+    body+ // แถวข้อมูลทั้งหมด
+    `<tr class="tt"><td><b>รวมทั้งหมด</b></td><td></td><td><b>${fm(T)}</b></td><td><b>${fm(UC)}</b></td><td><b>${fm(PD)}</b></td>`+ // แถวสรุปรวม: ชื่อ แถบ(ว่าง) รายรับ เบิกตามสิทธิ ชำระเอง
+    (showAN?`<td><b>${AN?fm(T/AN):'-'}</b></td>`:'')+ // รวม: รายรับต่อ AN (เฉพาะผู้ป่วยใน)
+    `<td><b>100%</b></td><td>${dchg(T,TP)}</td></tr>`+ // รวม: 100% และเทียบช่วงก่อน
+    '</table></div>'; // ปิดตารางและกล่องเลื่อน
+
+  box.innerHTML= // ประกอบทั้งการ์ดแล้วใส่ลงในกล่อง
+    '<div class="kp" style="margin-bottom:12px">'+ // เริ่มแถวช่องสรุป 4 ช่อง
+    kpi('รายรับรวม',fm(T),'บาท',T,TP,0)+ // ช่อง 1: รายรับรวม + % เทียบช่วงก่อน (ฟังก์ชัน kpi เดิมของแดชบอร์ด)
+    kc('เบิกตามสิทธิ',mil(UC),fm(UC/T*100,1)+'% ของรายรับทั้งหมด')+ // ช่อง 2: ยอดและสัดส่วนที่เบิกตามสิทธิ
+    kc('ผู้ป่วยชำระเอง',mil(PD),fm(PD/T*100,1)+'% ของรายรับทั้งหมด')+ // ช่อง 3: ยอดและสัดส่วนที่ผู้ป่วยชำระเอง
+    kc(byD?(pt==='ipd'?'หอผู้ป่วยรายรับสูงสุด':'แผนก/หอรายรับสูงสุด'):'สิทธิรายรับสูงสุด',esc(all[0].n),fm(all[0].inc/T*100,1)+'% ของรายรับทั้งหมด')+ // ช่อง 4: แถวที่รายรับสูงสุด
+    '</div>'+ // ปิดแถวช่องสรุป
+    b1+ // ปุ่มเลือกประเภทผู้ป่วย
+    b2+ // ปุ่มสลับมุมมอง
+    warn+ // ข้อความเตือน (ถ้าไม่พบข้อมูลผู้ป่วยในตอนดูรวม)
+    '<div class="lg" style="flex-wrap:wrap;margin:10px 0 8px">'+ // เริ่มคำอธิบายสี
+    ['uc','paid','oth'].map(k=>`<span><i style="background:${DPC[k]}"></i>${DPN[k]}</span>`).join('')+ // จุดสีพร้อมชื่อของแต่ละส่วน
+    '</div>'+ // ปิดคำอธิบายสี
+    tbl+ // ตารางรายรับ
+    note; // หมายเหตุวิธีนับรายรับผู้ป่วยใน (ถ้าเกี่ยวข้อง)
+}
+
+document.addEventListener('click',e=>{ // ดักการคลิกทั้งหน้า (event delegation) เพราะปุ่มถูกสร้างใหม่ทุกครั้งที่วาดการ์ด
+  const el=e.target&&e.target.closest?e.target:null; // องค์ประกอบที่ถูกคลิก (กันกรณีไม่ใช่ element)
+  if(!el)return; // ไม่ใช่ element ให้ออก
+  const v=el.closest('[data-dpv]'); // หาปุ่มสลับมุมมองที่ถูกคลิก (ถ้ามี)
+  const t=el.closest('[data-dpt]'); // หาปุ่มเลือกประเภทผู้ป่วยที่ถูกคลิก (ถ้ามี)
+  if(v){ // ถ้าคลิกโดนปุ่มสลับมุมมอง
+    DPV=v.dataset.dpv; // เปลี่ยนมุมมองตามค่าในปุ่ม ('dept' หรือ 'pt')
+    dpRender(); // วาดการ์ดใหม่
+  }
+  if(t){ // ถ้าคลิกโดนปุ่มประเภทผู้ป่วย
+    DPT=t.dataset.dpt; // เปลี่ยนประเภทผู้ป่วยตามค่าในปุ่ม ('opd' / 'ipd' / 'all')
+    dpRender(); // วาดการ์ดใหม่
+  }
+});
+
+/* [เพิ่มใหม่] ตารางเตียงรายหอผู้ป่วย: จำนวนเตียง + จำนวนเตียงที่ใช้งาน (เฉลี่ยต่อวัน) + % ครองเตียง */
+const BED_TOT=['bed_count','bedcount','total_beds','bed_total','beds','bed_qty','bed_all','bed_capacity','capacity'],BED_USE=['bed_used','used_beds','current_beds','occupied_beds','bed_occupied','bed_current','census'];
+function bedField(r,kind){ // อ่านค่าเตียงจากแถวหอผู้ป่วย: ลองชื่อคอลัมน์ที่พบบ่อยก่อน แล้วค่อยเดาจากคำว่า bed
+  const list=kind==='tot'?BED_TOT:BED_USE;
+  for(const k of list)if(r[k]!=null&&r[k]!==''&&isFinite(+r[k]))return +r[k];
+  const re=kind==='tot'?/total|all|count|qty|cap|^beds?$/i:/used|occup|current|census|inuse/i,ex=kind==='tot'?/used|occup|current|rate|pct|percent/i:/rate|pct|percent|total/i;
+  const k=Object.keys(r).find(k=>/bed/i.test(k)&&re.test(k)&&!ex.test(k)&&r[k]!=null&&r[k]!==''&&isFinite(+r[k]));
+  return k?+r[k]:null;
+}
+const bedNum=v=>v===''||v==null||isNaN(+v)?null:+v;
+function bedStats(rows){ // สรุปเตียงรายหอจาก hospital_bed_occupancy_stats: เตียง=ค่าล่าสุด, ใช้งาน/ชาย/หญิง=เฉลี่ยต่อวัน
+  const m=new Map();(rows||[]).forEach(r=>{const k=r.ward||r.ward_name||'ไม่ระบุ';if(!m.has(k))m.set(k,{n:r.ward_name||r.ward||'ไม่ระบุ',rows:[]});m.get(k).rows.push(r)});
+  const av=(rs,f)=>{const v=rs.map(f).filter(x=>x!=null);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null};
+  const ws=[...m.values()].map(w=>{const last=w.rows.reduce((x,y)=>String(y.record_date)>String(x.record_date)?y:x);
+    return{n:w.n,tot:bedNum(last.total_beds)??bedField(last,'tot'),used:av(w.rows,r=>bedNum(r.used_beds)??bedField(r,'use')),male:av(w.rows,r=>bedNum(r.male_count)),female:av(w.rows,r=>bedNum(r.female_count))}}).sort((x,y)=>String(x.n).localeCompare(String(y.n),'th'));
+  const sm=k=>ws.reduce((s,w)=>s+(w[k]||0),0);
+  return{ws,T:sm('tot'),U:sm('used'),M:sm('male'),F:sm('female')};
+}
+function wardBedHtml(rows,err){
+  const h='<p style="margin:16px 0 4px;font-weight:600">การใช้งานเตียงแต่ละหอผู้ป่วย</p>';
+  if(err)return h+'<div class="nd">โหลดตาราง <b>hospital_bed_occupancy_stats</b> ไม่ได้ — ตรวจสิทธิ์อ่าน (RLS policy)<br><small style="color:#b42318">'+esc(err)+'</small></div>';
+  if(!rows||!rows.length)return h+'<div class="nd">ไม่มีข้อมูลเตียงรายหอผู้ป่วยในช่วงที่เลือก (hospital_bed_occupancy_stats)</div>';
+  const B=bedStats(rows),ws=B.ws;
+  if(!ws.some(w=>w.tot!=null||w.used!=null))return h+'<div class="nd">ตาราง hospital_bed_occupancy_stats ไม่พบคอลัมน์จำนวนเตียง</div>';
+  const col=p=>p>100?'#c2371f':p>=90?'#e2563c':p>=75?'#e9a23b':'#2f9e6b',f1=v=>v==null?'-':fm(v,1);
+  const gT=B.M+B.F,mp=gT?B.M/gT*100:0,fp=gT?B.F/gT*100:0;
+  const gender=gT?`<div style="margin:6px 0 2px;font-size:12px;color:var(--mut)">ผู้ป่วยที่ครองเตียงแยกเพศ (เฉลี่ยต่อวัน)</div><div class="gb"><i style="width:${mp}%;background:#2563eb" title="ชาย"></i><i style="width:${fp}%;background:#d6457f" title="หญิง"></i></div><div class="gl"><span style="color:#2563eb">● ชาย <b>${f1(B.M)}</b> ราย (${fm(mp,1)}%)</span><span style="color:#d6457f">● หญิง <b>${f1(B.F)}</b> ราย (${fm(fp,1)}%)</span></div>`:'';
+  const row=(n,tot,used,m,f,b)=>{const p=tot?used/tot*100:null;return `<tr${b?' style="font-weight:700;background:#f4f8fb"':''}><td>${esc(n)}</td><td style="text-align:right">${fm(tot)}</td><td style="text-align:right">${f1(used)}</td><td style="text-align:right;color:#2563eb">${f1(m)}</td><td style="text-align:right;color:#d6457f">${f1(f)}</td><td style="min-width:140px">${p==null?'-':`<div style="display:flex;align-items:center;gap:6px"><div style="flex:1;height:10px;border-radius:9px;background:#e8eef5;overflow:hidden"><div style="height:100%;width:${Math.min(p,100)}%;background:${col(p)};border-radius:9px"></div></div><span style="min-width:42px;text-align:right">${fm(p,0)}%</span></div>${p>100?`<small style="color:#c2371f">เกินจำนวนเตียง ${fm(used-tot,1)}</small>`:''}`}</td></tr>`};
+  return h+gender+'<div style="overflow-x:auto;margin-top:8px"><table><tr><th>หอผู้ป่วย</th><th style="text-align:right">เตียง</th><th style="text-align:right">ใช้งาน</th><th style="text-align:right">ชาย</th><th style="text-align:right">หญิง</th><th>ครองเตียง</th></tr>'+ws.map(w=>row(w.n,w.tot,w.used,w.male,w.female)).join('')+row('รวมทุกหอ',B.T,B.U,B.M,B.F,true)+'</table></div><small style="color:var(--mut)">เตียง = ค่าล่าสุดในช่วงที่เลือก · ใช้งาน/ชาย/หญิง = เฉลี่ยต่อวัน (ชาย+หญิง = ผู้ป่วยที่ครองเตียง) · ครองเตียงเกิน 100% = ผู้ป่วยมากกว่าจำนวนเตียงที่ตั้งไว้</small>';
+}
+function nowStamp(a,b){ // เวลาปัจจุบัน ณ ตอนกดค้นหา — ค่าเปลี่ยนเฉพาะเมื่อเลือกวันที่แล้วค้นหา/โหลดใหม่
+  const t=new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date()).replace(/\s+(?=\d{2}:)/,' · ');
+  return `<div class="now"><span class="nd0" style="animation:none"></span>เวลาปัจจุบัน ณ ตอนค้นหา <b>${t} น.</b><span>· ข้อมูลวันที่ ${a===b?a:a+' ถึง '+b}</span></div>`}
 function render(cur,prev,a,b){
   SHORT=(new Date(b)-new Date(a))/864e5<=13;
   const d=cur.daily,pd=prev.daily,days=d.length||1,span=(new Date(b)-new Date(a))/864e5;
   const ser=(rows,f)=>group(rows,r=>r.record_date,f).sort((x,y)=>x[0]<y[0]?-1:1);
   const erR=cur.hourly.filter(r=>r.patient_type==='ER'),erP=prev.hourly.filter(r=>r.patient_type==='ER');
   const opd=sum(d,r=>r.opd_daily_count),adm=sum(d,r=>r.ipd_new_admit_daily),dis=sum(d,r=>r.ipd_discharged_daily),er=sum(erR,r=>r.service_count);
-  const tot=avg(d,r=>r.ipd_total_beds)||0,used=avg(d,r=>r.ipd_current_beds)||0,occ=tot?used/tot*100:0;
-  const pt=avg(pd,r=>r.ipd_total_beds)||0,pocc=pt?(avg(pd,r=>r.ipd_current_beds)||0)/pt*100:0;
-  const wait=avg(d,r=>r.avg_wait_for_doctor),los=avg(d,r=>r.ipd_avg_length_of_stay);
+  const BO=bedStats(cur.bed_occupancy),BOp=bedStats(prev.bed_occupancy),hasB=BO.T>0; // เตียง/ใช้งานจาก hospital_bed_occupancy_stats (ถ้าไม่มีใช้ daily เดิม)
+  const tot=hasB?BO.T:(avg(d,r=>r.ipd_total_beds)||0),used=hasB?BO.U:(avg(d,r=>r.ipd_current_beds)||0),occ=tot?used/tot*100:0;
+  const pt=BOp.T>0?BOp.T:(avg(pd,r=>r.ipd_total_beds)||0),pocc=pt?(BOp.T>0?BOp.U:(avg(pd,r=>r.ipd_current_beds)||0))/pt*100:0;
+  const wait=avg(d,r=>r.avg_wait_for_doctor),consult=avg(d,r=>r.avg_doctor_consult_time),los=avg(d,r=>r.ipd_avg_length_of_stay);
   const iO=sum(d,r=>r.opd_his_income),iI=sum(d,r=>r.ipd_his_discharge_income),iE=sum(d,r=>r.er_his_income),inc=iO+iI;
   const pinc=sum(pd,r=>r.opd_his_income)+sum(pd,r=>r.ipd_his_discharge_income);
   const readmit=avg(d,r=>r.readmit_28days_pct),proc=avg(d,r=>r.avg_total_process_time);
   const keyf=span>62?(s=>s.slice(0,7)):(s=>s),keys=[...new Set(d.map(r=>keyf(r.record_date)))].sort();
   const mv=(rows,f)=>keys.map(k=>sum(rows.filter(r=>keyf(r.record_date)===k),f));
-  const flow=[['ลงทะเบียน→คัดกรอง',avg(d,r=>r.avg_wait_reg_to_triage)],['รอพบแพทย์',wait],['ตรวจโดยแพทย์',avg(d,r=>r.avg_doctor_consult_time)],['รอรับยา',avg(d,r=>r.avg_wait_for_pharmacy)],['รวมทั้งกระบวนการ',proc]];
+  const flow=[['ลงทะเบียน→คัดกรอง',avg(d,r=>r.avg_wait_reg_to_triage)],['รอพบแพทย์',wait],['ตรวจโดยแพทย์',consult],['รอรับยา',avg(d,r=>r.avg_wait_for_pharmacy)],['รวมทั้งกระบวนการ',proc]];
   const dep=group(cur.department,r=>r.department,r=>r.visit_count).slice(0,10);
   const tri=group(cur.er_triage,r=>r.triage_level_name,r=>r.patient_count).sort((x,y)=>x[0]<y[0]?-1:1),trT=sum(tri,r=>r[1])||1;
   const dr={};cur.doctor_clinic.forEach(r=>{const o=dr[r.doctor_code]||(dr[r.doctor_code]={n:r.doctor_name,c:r.clinic_name,v:0,p:0,a:0});o.v+=num(r.visit_count);o.p+=num(r.patient_count);o.a+=num(r.admit_count)});
   const drs=Object.values(dr).sort((x,y)=>y.v-x.v).slice(0,8);
   const pay=group(cur.pttype,r=>r.pttype_name,r=>r.his_income),payT=sum(pay,r=>r[1])||1;
-  const al=[['อัตราการครองเตียง',occ,TARGET.occ,'%'],['เวลารอพบแพทย์',wait,TARGET.wait,' นาที'],['Readmit 28 วัน',readmit,TARGET.readmit,'%'],['เวลารวมทั้งกระบวนการ OPD',proc,TARGET.total,' นาที']];
+  const al=[['อัตราการครองเตียง',occ,TARGET.occ,'%'],['เวลารอพบแพทย์',wait,TARGET.wait,' นาที'],['ระยะเวลาตรวจแพทย์',consult,TARGET.consult,' นาที'],['Readmit 28 วัน',readmit,TARGET.readmit,'%'],['เวลารวมทั้งกระบวนการ OPD',proc,TARGET.total,' นาที']];
   const deep=deepCharts(cur,d,keys,keyf,erR);
   const gcol=occ>TARGET.occ?'#e2563c':'#14a3a8';
   $('#app').innerHTML=
@@ -259,34 +560,105 @@ function render(cur,prev,a,b){
      kpi('ER ผู้ป่วยฉุกเฉิน',fm(er),'ครั้ง',er,sum(erP,r=>r.service_count),0,ser(erR,r=>r.service_count),'#e2563c')+
      kpi('จำหน่ายผู้ป่วยใน',fm(dis),'ราย',dis,sum(pd,r=>r.ipd_discharged_daily),0,ser(d,r=>r.ipd_discharged_daily),'#7c6bd6')+
      kpi('เวลารอพบแพทย์',fm(wait,1),'นาที',wait,avg(pd,r=>r.avg_wait_for_doctor),1,ser(d,r=>r.avg_wait_for_doctor),'#e9a23b')+
+     kpi('ระยะเวลาตรวจแพทย์',fm(consult,1),'นาที',consult,avg(pd,r=>r.avg_doctor_consult_time),1,ser(d,r=>r.avg_doctor_consult_time),'#0b7a8a')+
      kpi('วันนอนเฉลี่ย',fm(los,1),'วัน',los,avg(pd,r=>r.ipd_avg_length_of_stay),1,ser(d,r=>r.ipd_avg_length_of_stay),'#7c6bd6')+
-     kpi('รายได้รวม',fm(inc/1e6,2),'ล้านบาท',inc,pinc,0,ser(d,r=>num(r.opd_his_income)+num(r.ipd_his_discharge_income)))}</div></div>`,'w12')+
+     kpi('รายได้รวม',fm(inc),'บาท',inc,pinc,0,ser(d,r=>num(r.opd_his_income)+num(r.ipd_his_discharge_income)))}</div></div>`,'w12')+
    sec(2,'แนวโน้มจำนวนผู้ป่วย','Patient Volume Trend',keys.length?chart(keys,[{n:'OPD',c:'#0b7a8a',u:' ครั้ง',v:mv(d,r=>r.opd_daily_count)},{n:'IPD รับใหม่',c:'#2f9e6b',u:' ราย',v:mv(d,r=>r.ipd_new_admit_daily)},{n:'ER',c:'#e2563c',u:' ครั้ง',v:mv(erR,r=>r.service_count)}],null,'ผลรวมทั้งเดือน'):'<div class="nd">ไม่มีข้อมูล</div>','w6')+
    sec(3,'ผู้ป่วยตามแผนก','Patient by Department',bars(dep),'w6')+
-   sec(4,'ระยะเวลารอ OPD','OPD Flow & Waiting Time',bars(flow.map(f=>[f[0],f[1]||0,PAL[0]]),' นาที'))+
-   sec(5,'บริหารเตียงผู้ป่วยใน','IPD & Bed Management',`<div class="dn2">${donut([['เตียงที่ครอง',used],['เตียงว่าง',Math.max(tot-used,0)]],[gcol,'#c9d6e2'],fm(occ,0)+'%',132,{sub:'ครองเตียง',target:TARGET.occ,label:'อัตราครองเตียง',fmtv:v=>fm(v)+' เตียง'})}<div style="flex:1;min-width:150px"><div style="color:var(--mut);font-size:12px">เตียงทั้งหมด</div><b style="font-size:24px">${fm(tot)}</b>${dlegend([['ครอง',used],['ว่าง',Math.max(tot-used,0)]],[gcol,'#c9d6e2'],v=>fm(v))}</div></div><table style="margin-top:8px"><tr><th>รับใหม่</th><th>จำหน่าย</th><th>วันนอนเฉลี่ย</th></tr><tr><td>${fm(adm)}</td><td>${fm(dis)}</td><td>${fm(los,1)} วัน</td></tr></table>`)+
+   sec(4,'ระยะเวลารอ OPD','OPD Flow & Waiting Time',nowStamp(a,b)+bars(flow.map(f=>[f[0],f[1]||0,PAL[0]]),' นาที'))+
+   sec(5,'บริหารเตียงผู้ป่วยใน','IPD & Bed Management',`<div class="dn2">${donut([['เตียงที่ครอง',used],['เตียงว่าง',Math.max(tot-used,0)]],[gcol,'#c9d6e2'],fm(occ,0)+'%',132,{sub:'ครองเตียง',target:TARGET.occ,label:'อัตราครองเตียง',fmtv:v=>fm(v)+' เตียง'})}<div style="flex:1;min-width:150px"><div style="color:var(--mut);font-size:12px">เตียงทั้งหมด</div><b style="font-size:24px">${fm(tot)}</b>${dlegend([['ครอง',used],['ว่าง',Math.max(tot-used,0)]],[gcol,'#c9d6e2'],v=>fm(v))}</div></div><table style="margin-top:8px"><tr><th>รับใหม่</th><th>จำหน่าย</th><th>วันนอนเฉลี่ย</th></tr><tr><td>${fm(adm)}</td><td>${fm(dis)}</td><td>${fm(los,1)} วัน</td></tr></table>${wardBedHtml(cur.bed_occupancy,IPDERR.bed_occupancy)}`)+
    sec(6,'งานอุบัติเหตุฉุกเฉิน','Emergency Department',`<div class="kp" style="grid-template-columns:1fr 1fr">${kpi('ผู้ป่วย ER',fm(er),'ครั้ง',er,sum(erP,r=>r.service_count),0)}${kpi('เฉลี่ยต่อวัน',fm(er/days,1),'ครั้ง',0,0)}</div><p style="margin:12px 0 2px;font-weight:600">ระดับความเร่งด่วน (Triage)</p>${bars(tri.map((t,i)=>[t[0]+' ('+fm(t[1]/trT*100,0)+'%)',t[1],['#e2563c','#f08a3c','#e9a23b','#2f9e6b','#8aa0b3'][i%5]]))}`)+
    sec(7,'ผลปฏิบัติงานแพทย์/คลินิก','Doctor & Clinic Performance',drs.length?`<table><tr><th>แพทย์ / คลินิก</th><th>ครั้ง</th><th>คน</th><th>Admit</th></tr>${drs.map(r=>`<tr><td><b>${r.n||'-'}</b><br><small style="color:#5d7186">${r.c||''}</small></td><td>${fm(r.v)}</td><td>${fm(r.p)}</td><td>${fm(r.a)}</td></tr>`).join('')}</table>`:'<div class="nd">ไม่มีข้อมูล</div>')+
-   sec(8,'วิเคราะห์รายได้','Financial & Revenue Analysis',`<div class="dn2">${donut([['OPD',iO-iE],['IPD',iI],['ER',iE]],PAL,fm(inc/1e6,1)+'M',132,{sub:'ล้านบาท',label:'สัดส่วนรายได้',fmtv:v=>fm(v/1e6,2)+' ล้านบาท'})}${dlegend([['OPD',iO-iE],['IPD',iI],['ER',iE]],PAL,v=>fm(v/1e6,2)+' ลบ.')}</div><p style="margin:12px 0 2px;font-weight:600">ตามสิทธิการรักษา (OPD)</p>${bars(pay.slice(0,5).map(p=>[p[0],p[1]/payT*100,'#2f9e6b']),'%')}`)+
+   sec(8,'วิเคราะห์รายได้','Financial & Revenue Analysis',`<div class="dn2">${donut([['OPD',iO-iE],['IPD',iI],['ER',iE]],PAL,fm(inc),132,{sub:'บาท',label:'สัดส่วนรายได้',fmtv:v=>fm(v)+' บาท'})}${dlegend([['OPD',iO-iE],['IPD',iI],['ER',iE]],PAL,v=>fm(v)+' บาท')}</div><p style="margin:12px 0 2px;font-weight:600">ตามสิทธิการรักษา (OPD)</p>${bars(pay.slice(0,5).map(p=>[p[0],p[1]/payT*100,'#2f9e6b']),'%')}`)+
    sec(9,'คุณภาพบริการ','Quality',`<div class="kp" style="grid-template-columns:1fr">${kpi('อัตรากลับมารักษาซ้ำภายใน 28 วัน',fm(readmit,1),'%',readmit,avg(pd,r=>r.readmit_28days_pct),1,ser(d,r=>r.readmit_28days_pct),'#e9a23b')}</div><p class="nd">ความพึงพอใจผู้ป่วยยังไม่มีข้อมูล — เพิ่มตารางแบบสำรวจเพื่อแสดงส่วนนี้</p>`)+
+   // [เพิ่มใหม่] การ์ดรายรับแยกตามแผนก/หอผู้ป่วย/สิทธิ (เป็นกล่องว่าง #dpc แล้ว dpRender() ค่อยเติมเนื้อหา)
+   sec('8.1','รายรับแยกตามแผนก หอผู้ป่วย และสิทธิการรักษา','Revenue by Department, Ward & Patient Right','<div id="dpc"></div>','w12')+
    sec(10,'แจ้งเตือนและสิ่งที่ต้องดำเนินการ','Hospital Alert & Action',`<table class="al"><tr><th>เรื่อง</th><th>ค่าปัจจุบัน</th><th>เป้าหมาย</th><th>สถานะ</th></tr>${al.map(r=>{const g=r[1]==null?null:r[1]<=r[2];return `<tr class="${g===false?'b':''}"><td>${r[0]}</td><td><b>${fm(r[1],1)}${r[3]}</b></td><td>≤ ${r[2]}${r[3]}</td><td><span class="chip ${g===false?'bad':'ok'}">${g==null?'-':g?'ปกติ':'ต้องปรับปรุง'}</span></td></tr>`}).join('')}</table>`,'w12')+deep;
+  // [เพิ่มใหม่] ส่งข้อมูลแผนก หอผู้ป่วย และสิทธิ (ช่วงปัจจุบัน/ก่อนหน้า) เข้าสู่การ์ด
+  DPS={dept:cur.department||[],pt:cur.pttype||[],ward:cur.ward||[],ipt:cur.ipd_pttype||[]}; // ข้อมูลช่วงปัจจุบัน
+  DPQ={dept:prev.department||[],pt:prev.pttype||[],ward:prev.ward||[],ipt:prev.ipd_pttype||[]}; // ข้อมูลช่วงก่อนหน้า
+  dpRender(); // วาดการ์ดลงหน้าจอ
 }
 
+
+/* ===== ส่วนเพิ่มตามโครงเว็บสถิติโรงพยาบาล: รายงานรายเดือน / KPI / รับ–จำหน่ายรายวอร์ด (ข้อมูลจาก Supabase) ===== */
+const XT=[{k:'opd_daily_count',n:'ผู้ป่วยนอก (OPD)',u:'ครั้ง',g:'sum'},{k:'ipd_new_admit_daily',n:'รับใหม่ IPD',u:'ราย',g:'sum'},{k:'ipd_discharged_daily',n:'จำหน่าย IPD',u:'ราย',g:'sum'},{k:'ipd_avg_length_of_stay',n:'วันนอนเฉลี่ย',u:'วัน',g:'avg',d:1},{k:'opd_his_income',n:'รายได้ OPD',u:'บาท',g:'sum'},{k:'ipd_cash_discharge_income',n:'รายได้ IPD',u:'บาท',g:'sum'}];
+let XD=null,xk=XT[0];
+const xmon=k=>['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][+k.slice(5)-1]+' '+String(+k.slice(0,4)+543).slice(2);
+function xbars(ser,lab,d=0){
+  const W=NARROW()?360:700,H=270,B=30,T=16,n=lab.length,single=ser.length===1,top=Math.max(1,...ser.flatMap(x=>x.v));
+  const vt=single?ser[0].v.map(v=>fm(v,d)):[],maxLen=vt.length?Math.max(...vt.map(t=>t.length)):0;
+  const cw0=(W-62)/Math.max(n,1),rot=single&&n<=14&&cw0*.96/(maxLen*.58)<7.5; // ตัวเลขยาวเกินช่อง -> หมุนแนวตั้ง
+  const room=rot?(maxLen*6+14)/(H-T-B):.12,mx=top*(1+Math.max(room,.12));
+  const ticks=[0,1,2,3,4].map(i=>fr(mx*(1-i/4),mx<10?1:0));
+  const L=Math.max(46,Math.max(...ticks.map(t=>t.length))*6.4+12),cw=(W-L)/Math.max(n,1),bw=Math.min(40,cw*.72/ser.length);let g='';
+  ticks.forEach((t,i)=>{const y=T+(H-T-B)*i/4;g+=`<line x1="${L}" x2="${W}" y1="${y}" y2="${y}" stroke="#e2eaf2"/><text x="${L-6}" y="${y+4}" font-size="11" text-anchor="end" fill="#60758a">${t}</text>`});
+  ser.forEach((x,si)=>x.v.forEach((v,i)=>{const h=(H-T-B)*v/mx,px=L+cw*i+(cw-bw*ser.length)/2+bw*si,y=H-B-h;
+    g+=`<rect x="${px}" y="${y}" width="${bw-2}" height="${h}" rx="5" fill="${x.c}"><title>${lab[i]}: ${fm(v,d)}</title></rect>`;
+    if(single&&n<=14){const cx=L+cw*i+cw/2,t=vt[i];
+      g+=rot?`<text transform="rotate(-90 ${cx+4} ${y-6})" x="${cx+4}" y="${y-6}" font-size="10.5" fill="#0b1f33">${t}</text>`
+            :`<text x="${cx}" y="${y-6}" font-size="${Math.min(11,cw*.96/(t.length*.58)).toFixed(2)}" text-anchor="middle" fill="#0b1f33">${t}</text>`}}));
+  const st=Math.ceil(n/14);lab.forEach((l,i)=>{if(i%st==0)g+=`<text x="${L+cw*i+cw/2}" y="${H-10}" font-size="11" text-anchor="middle" fill="#60758a">${l}</text>`});
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%"><defs><linearGradient id="xg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2dd4bf"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>${g}</svg>`;
+}
+const xsec=(n,t,s,b)=>`<section class="s w12" id="sec${n}"><div class="h"><b>${n}</b><h2>${t}</h2><span>${s}</span></div>${b}</section>`;
+function xmonthly(rows,t){const m={};rows.forEach(r=>{const v=r[t.k];if(v===''||v==null||isNaN(+v))return;const k=String(r.record_date).slice(0,7),o=m[k]??={s:0,n:0};o.s+=+v;o.n++});return Object.keys(m).sort().map(k=>({k,n:m[k].n,v:t.g=='sum'?m[k].s:m[k].s/m[k].n}))}
+function xDraw(){
+  const ms=xmonthly(XD.daily,xk);
+  $('#xchips').innerHTML=XT.map(t=>`<button class="${t===xk?'on':''}" data-k="${t.k}">${t.n}</button>`).join('');
+  $('#xchart').innerHTML=ms.length?xbars([{v:ms.map(x=>x.v),c:'url(#xg)'}],ms.map(x=>xmon(x.k)),xk.d||0):'<div class="nd">ไม่มีข้อมูล</div>';
+  $('#xtab').innerHTML=`<tr><th>เดือน</th><th>${xk.u}${xk.g=='avg'?' (เฉลี่ย/วัน)':' (รวม)'}</th><th>เทียบเดือนก่อน</th><th>วันที่มีข้อมูล</th></tr>`+ms.map((x,i)=>{const p=i?ms[i-1].v:0,c=p?(x.v-p)/p*100:null;return `<tr><td>${xmon(x.k)}</td><td><b>${fm(x.v,xk.d||0)}</b></td><td class="${c==null?'':c>=0?'up':'dn'}">${c==null?'-':(c>=0?'▲ ':'▼ ')+fm(Math.abs(c),1)+'%'}</td><td>${x.n}</td></tr>`}).reverse().join('');
+}
+async function xtra(){
+  document.querySelectorAll('.xs').forEach(e=>e.remove());
+  const host=document.querySelector('main');if(!host)return;
+  const mk=h=>{const d=document.createElement('div');d.className='xs';d.style.display='contents';d.innerHTML=h;host.append(d)};
+  try{
+    if(!XD){const a='2025-10-01',b=iso(new Date());XD={daily:await get('daily',a,b)}}
+    if(!XD.daily.length){mk(xsec(19,'รายงานรายเดือน','Monthly Report','<div class="nd">ยังไม่มีข้อมูลรายเดือน</div>'));return}
+        mk(xsec(19,'รายงานรายเดือน','Monthly Report',`<div class="tg" id="xchips" style="margin-bottom:12px"></div><div id="xchart"></div><div style="overflow-x:auto;margin-top:12px"><table id="xtab"></table></div>`));
+    $('#xchips').onclick=e=>{const k=e.target.dataset.k;if(k){xk=XT.find(t=>t.k===k);xDraw()}};
+    xDraw();
+  }catch(e){mk(xsec(19,'รายงานรายเดือน','Monthly Report',`<div class="nd">โหลดข้อมูลไม่สำเร็จ: ${String(e.message).replace(/[<>]/g,'')}</div>`))}
+}
 async function load(){
   const a=$('#from').value,b=$('#to').value;if(!a||!b||a>b){$('#msg').textContent='เลือกช่วงวันที่ให้ถูกต้อง';return}
-  tip.style.display='none';const len=Math.max(1,Math.round((new Date(b)-new Date(a))/864e5)+1),pa=addD(a,-len),pb=addD(a,-1),c=cfg(),live=c.u&&c.k;
+  tip.style.display='none';const len=Math.max(1,Math.round((new Date(b)-new Date(a))/864e5)+1),pa=addD(a,-len),pb=addD(a,-1),c=cfg(),live=c.u&&c.k;CMP={len,pa,pb};
   $('#msg').textContent=live?'กำลังโหลดข้อมูล…':'กำลังแสดงข้อมูลตัวอย่าง — แก้ CONFIG ในไฟล์ หรือกด "ตั้งค่า" เพื่อเชื่อมต่อ Supabase';
   try{
     let all;
-    if(live){const r=await Promise.all(TB.map(t=>get(t,pa,b)));all={};TB.forEach((t,i)=>all[t]=r[i]);$('#msg').textContent='';}
+    if(live){ // โหมดเชื่อมต่อฐานข้อมูลจริง
+      const r=await Promise.all(TB.map(t=>get(t,pa,b))); // ดึงตารางเดิมทั้งหมดพร้อมกัน
+      all={}; // อ็อบเจ็กต์เก็บข้อมูลทุกตาราง
+      TB.forEach((t,i)=>all[t]=r[i]); // จับคู่ชื่อตารางกับข้อมูลที่ดึงมา
+      IPDERR={};
+      for(const t of ['ward','ipd_pttype','bed_occupancy']){ // [เพิ่มใหม่] วนดึงตารางผู้ป่วยในทีละตาราง (แยกจากตารางหลัก)
+        try{all[t]=await get(t,pa,b);} // ดึงจาก hospital_ward_stats / hospital_ipd_pttype_stats
+        catch(e){all[t]=[];IPDERR[t]=e.message;} // ถ้าอ่านไม่ได้ ต้องไม่ทำให้ทั้งแดชบอร์ดพัง (การ์ดจะแสดงข้อความเตือนเอง)
+      }
+      $('#msg').textContent=''; // ล้างข้อความสถานะ "กำลังโหลด"
+    }
     else all=demo(pa,b);
     const cut=(o,f)=>{const x={};TB.forEach(t=>x[t]=o[t].filter(f));return x};
-    const cc=cut(all,r=>r.record_date>=a&&r.record_date<=b),have=new Set(cc.daily.map(r=>r.record_date)).size;render(cc,cut(all,r=>r.record_date>=pa&&r.record_date<=pb),a,b);banner(a,b,pa,pb,len,document.querySelector('[data-d="7"]').classList.contains('on'),have);window.v3sync&&v3sync(b);
+    const cc=cut(all,r=>r.record_date>=a&&r.record_date<=b); // กรองทุกตารางหลักให้เหลือเฉพาะช่วงวันที่ปัจจุบัน
+    const sel=(rows,x,y)=>rows?rows.filter(r=>r.record_date>=x&&r.record_date<=y):[]; // [เพิ่มใหม่] ฟังก์ชันกรองช่วงวันที่ของตารางผู้ป่วยใน (ไม่มีข้อมูล = อาร์เรย์ว่าง)
+    cc.ward=sel(all.ward,a,b); // [เพิ่มใหม่] ข้อมูลหอผู้ป่วยช่วงปัจจุบัน
+    cc.bed_occupancy=sel(all.bed_occupancy,a,b); // ข้อมูลเตียงรายหอ จาก hospital_bed_occupancy_stats
+    cc.ipd_pttype=sel(all.ipd_pttype,a,b); // [เพิ่มใหม่] ข้อมูลสิทธิผู้ป่วยในช่วงปัจจุบัน
+    const have=new Set(cc.daily.map(r=>r.record_date)).size; // นับจำนวนวันที่มีข้อมูลจริง
+    const pv=cut(all,r=>r.record_date>=pa&&r.record_date<=pb); // กรองทุกตารางหลักให้เหลือเฉพาะช่วงก่อนหน้า (ไว้เปรียบเทียบ)
+    pv.ward=sel(all.ward,pa,pb); // [เพิ่มใหม่] ข้อมูลหอผู้ป่วยช่วงก่อนหน้า
+    pv.bed_occupancy=sel(all.bed_occupancy,pa,pb);
+    pv.ipd_pttype=sel(all.ipd_pttype,pa,pb); // [เพิ่มใหม่] ข้อมูลสิทธิผู้ป่วยในช่วงก่อนหน้า
+    LAST=[cc,pv,a,b];render(cc,pv,a,b); // วาดทั้งหน้าจอ (รวมการ์ดใหม่)
+ xtra(); // ส่วนเพิ่ม: รายงานรายเดือน / KPI / รับ–จำหน่ายรายวอร์ด
+    banner(a,b,pa,pb,len,document.querySelector('[data-d="7"]').classList.contains('on'),have); // แสดงแถบสรุปช่วงวันที่ (โค้ดเดิม)
+    window.v3sync&&v3sync(b); // ซิงก์วันที่กับส่วนอื่น (โค้ดเดิม)
   }catch(e){$('#msg').textContent=(AUTO?'ไม่สามารถโหลดข้อมูลได้ในขณะนี้ กรุณาลองใหม่ภายหลัง':'โหลดข้อมูลไม่สำเร็จ: '+e.message+' — ตรวจ URL, key และสิทธิ์อ่านตาราง (RLS policy)')}
 }
 function logo(){const l=cfg().l;$('#logo').innerHTML=l?`<img src="${l.replace(/"/g,'')}" alt="โลโก้" onerror="this.parentNode.textContent='✚'">`:'✚'}
 async function latestDay(){const c=cfg();if(!c.u||!c.k)return iso(new Date());try{const r=await fetch(`${c.u}/rest/v1/hospital_daily_stats?select=record_date&order=record_date.desc&limit=1`,{headers:{apikey:c.k,Authorization:'Bearer '+c.k}});if(!r.ok)return iso(new Date());const j=await r.json();return j[0]&&/^\d{4}-\d{2}-\d{2}$/.test(j[0].record_date)?j[0].record_date:iso(new Date())}catch(e){return iso(new Date())}}
-async function setRange(n,btn){document.querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('on',x===btn));const t=n&&n<=30?await latestDay():iso(new Date());$('#to').value=t;$('#from').value=n?addD(t,-n+1):new Date().getFullYear()+'-01-01';load()}
+async function setRange(n,btn){document.querySelectorAll('[data-d]').forEach(x=>x.classList.toggle('on',x===btn));const t=n===-1?new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Bangkok'}):(n&&n<=30?await latestDay():iso(new Date()));$('#to').value=t;$('#from').value=n===-1?t:(n?addD(t,-n+1):new Date().getFullYear()+'-01-01');load()} // n=-1 คือปุ่ม "วันนี้" (วันที่ปัจจุบันวันเดียว)
 document.querySelectorAll('[data-d]').forEach(x=>x.onclick=()=>setRange(+x.dataset.d,x));
 $('#to').value=iso(new Date());$('#from').value=addD($('#to').value,-6);
 $('#go').onclick=()=>{document.querySelectorAll('[data-d]').forEach(x=>x.classList.remove('on'));load()};
@@ -308,7 +680,7 @@ document.addEventListener('scroll',()=>{tip.style.display='none'},true);
 /* ===== ส่วน 3D (โหลดเมื่อเลื่อนมาถึง) ===== */
 function init3D(){
 const TG={triage:10,doctor:20,consult:15,pharm:15,total:60,occ:85}; // เป้าหมายเวลา (นาที) / % เตียง
-const $=s=>document.querySelector('#v3 '+s),n=v=>+v||0,fm=(v,d=0)=>v==null?'-':v.toLocaleString('th-TH',{maximumFractionDigits:d});
+const $=s=>document.querySelector('#v3 '+s),n=v=>+v||0,fm=(v,d=0)=>v==null?'-':v.toLocaleString('th-TH',{maximumFractionDigits:2});
 const val=v=>v===null||v===undefined||v===''||!isFinite(+v)?null:+v;
 
 /* ---------- data ---------- */
@@ -363,9 +735,9 @@ function paintSign(m){const{c,t,t1,t2}=m.userData,x=c.getContext('2d'),W=c.width
 function sign(w,h,t1,t2,x,y,z,ry,posts){const c=document.createElement('canvas');c.width=512;c.height=Math.round(512*h/w);const t=new THREE.CanvasTexture(c),m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t,side:THREE.DoubleSide}));m.userData={c,t,t1,t2};m.position.set(x,y,z);m.rotation.y=ry||0;SC.add(m);signs.push(m);paintSign(m);
   if(posts){const dx=Math.cos(ry||0)*w/2,dz=-Math.sin(ry||0)*w/2;[-1,1].forEach(s=>{const p=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,y,6),MT(0x8a97a3));p.position.set(x+dx*s,y/2,z+dz*s);SC.add(p)})}return m}
 sign(7,2,'ห้องบัตร','Registration',-22,6.2,-3.5,Math.PI/2,0);
-sign(8,2,'ซักประวัติ','History talking',0,5.6,.2,0,1);
-sign(9,2,'ห้องตรวจ · จุดรอพบแพทย์','Examination Rooms',0,5.3,-11.9,0,0);
-sign(7,2,'จ่ายยา','Pharmacy',25.2,5.6,-1,-Math.PI/2,0);
+sign(8,2,'ซักประวัติ','History talking',0,6.8,.2,0,1);
+sign(9,2,'ห้องตรวจ · จุดรอพบแพทย์','Examination Rooms',0,6.6,-11.9,0,0);
+sign(7,2,'จ่ายยา','Pharmacy',25.2,6.4,-1,-Math.PI/2,0);
 /* ฟิกเกอร์คน */
 const bodyG=new THREE.CylinderGeometry(.22,.28,.8,10),headG=new THREE.SphereGeometry(.22,12,10);
 function person(c,x,z,par,hc){const g=new THREE.Group(),b=new THREE.Mesh(bodyG,MT(c)),h=new THREE.Mesh(headG,MT(hc||0xf2c9a0));b.position.y=.5;h.position.y=1.12;b.castShadow=true;g.add(b,h);g.position.set(x,0,z);(par||SC).add(g);return g}
@@ -381,27 +753,31 @@ const statMat=()=>new THREE.MeshStandardMaterial({color:0x2fd08a,emissive:0x2fd0
 /* 0 ห้องบัตร */
 {const o={id:'reg',kind:'reg',name:'ห้องบัตร',en:'Registration',x:-22,z:4},g=reg(o,3.6,3,10.5,4.9,6,2);
   box(1.4,1.5,10,0x5b3a29,0,.75,0,g);box(1.9,.14,10.4,0xf4f4f0,0,1.57,0,g);box(.1,.9,10,0x111820,.5,2.1,0,g,{transparent:true,opacity:.55});
-  [-3,0,3].forEach(z=>person(0x2f7f6a,-1.5,z,g));
+  
   o.stat=new THREE.Mesh(new THREE.BoxGeometry(.18,.18,10.4),statMat());o.stat.position.set(.95,1.4,0);g.add(o.stat);
   [[-17.8,-3.4],[-17.8,-6]].forEach(([x,z])=>{const k=new THREE.Group();k.position.set(x,0,z);SC.add(k);box(.9,2.6,.9,0xf6f2e6,0,1.3,0,k);box(.06,.8,.7,0x2fb2a0,-.46,2.0,0,k,{emissive:0x2fb2a0,emissiveIntensity:.8});box(1.1,.15,1.1,0x1d6b34,0,.08,0,k)})}
 /* 1-5 โต๊ะซักประวัติ */
 XD.forEach((x,k)=>{const o={id:'hx'+(k+1),kind:'desk',no:k+1,name:'ซักประวัติ '+(k+1),en:'History talking · โต๊ะ '+(k+1),x,z:ZD},g=reg(o,3,3,3.4,3.7,3.5,1.18);
   box(2.8,1.05,1.3,0xf3f1ea,0,.52,0,g);box(1.1,.85,.5,0xf4b6cb,0,1.5,-.15,g);box(2.8,.06,.06,0xffe45c,0,1.08,.66,g);
-  box(.9,.12,.9,0x3f9fd0,0,.55,-1.3,g);box(.9,.9,.12,0x3f9fd0,0,1.05,-1.8,g);person(0xffffff,0,-1.3,g);
+  box(.9,.12,.9,0x3f9fd0,0,.55,-1.3,g);box(.9,.9,.12,0x3f9fd0,0,1.05,-1.8,g);
   o.stat=new THREE.Mesh(new THREE.BoxGeometry(2.8,.12,.18),statMat());o.stat.position.set(0,.05,.9);g.add(o.stat)});
 /* 6-11 ห้องตรวจ */
 XR.forEach((x,k)=>{const o={id:'ex'+(k+1),kind:'room',no:k+1,name:'ห้องตรวจ '+(k+1),en:'Examination room '+(k+1),x,z:ZR},g=reg(o,4.2,3.2,4.2,4.2,4.2,1.4);
   box(4.2,.1,4,0xe9f0f4,0,.05,0,g);box(4.2,3,.15,0xf7f9fb,0,1.5,-2,g);box(.15,3,4,0xf7f9fb,-2.1,1.5,0,g);box(.15,3,4,0xf7f9fb,2.1,1.5,0,g);
   box(1.2,3,.15,0xf7f9fb,-1.5,1.5,2,g);box(1.2,3,.15,0xf7f9fb,1.5,1.5,2,g);
-  box(1,.5,2.2,0x8ec3d8,-1,.4,-.5,g);box(1,.8,.6,0xc79a5b,1.2,.4,-1.5,g);person(0x2a8fbd,1.2,-.8,g);
+  box(1,.5,2.2,0x8ec3d8,-1,.4,-.5,g);box(1,.8,.6,0xc79a5b,1.2,.4,-1.5,g);
   o.stat=new THREE.Mesh(new THREE.BoxGeometry(2,.5,.18),statMat());o.stat.position.set(0,2.75,2);g.add(o.stat)});
 /* 12 ช่องจ่ายยา */
-{const o={id:'ph',kind:'ph',name:'รับยา',en:'Pharmacy · Dispensary',x:24,z:-1},g=reg(o,2.6,3.4,8.4,4.9,4,1.35);
+{const o={id:'ph',kind:'ph',name:'รับยา',en:'Pharmacy · Dispensary',x:24,z:-1},g=reg(o,2.6,3.4,8.4,3.2,4,1.35);
   box(1.8,1.2,8,0xf4f4f0,0,.6,0,g);box(1.2,3.6,8,0xdfe8e0,2.1,1.8,0,g);box(.15,1.5,2.2,0x2fb27a,-.95,1.9,0,g,{emissive:0x2fb27a,emissiveIntensity:.45});
-  person(0xffffff,1.0,0,g);
+  
   o.stat=new THREE.Mesh(new THREE.BoxGeometry(.18,.18,8),statMat());o.stat.position.set(-.95,1.3,0);g.add(o.stat)}
 /* ทางเข้า-ออก */
 {const a=label(3.4,1.15);a.position.set(-29,2.2,12);paint(a,'ทางเข้า','Entrance','#27c4cf');SC.add(a);const b=label(3.4,1.15);b.position.set(29,2.2,12);paint(b,'ทางออก','Exit','#27c4cf');SC.add(b)}
+const TP={};
+function tplate(k,x,y,z){const l=label(5.4,1.8);l.position.set(x,y,z);SC.add(l);TP[k]=l}
+tplate('reg',-21.6,4.2,-3.5);tplate('desk',0,5.4,.2);tplate('room',0,5.0,-11.6);tplate('ph',24.8,4.6,-1);tplate('exit',29,4.3,12);
+function paintT(sp,txt,col){const c=sp.userData.c,x=c.getContext('2d');x.clearRect(0,0,512,170);x.fillStyle='#0f2236ee';x.beginPath();x.roundRect?x.roundRect(8,24,496,122,30):x.rect(8,24,496,122);x.fill();x.strokeStyle=col;x.lineWidth=5;x.stroke();x.textAlign='center';x.fillStyle=col;x.font='700 54px "IBM Plex Sans Thai",sans-serif';x.fillText(txt,256,102);sp.userData.t.needsUpdate=true}
 const selR=new THREE.Mesh(new THREE.RingGeometry(2.4,2.7,48),new THREE.MeshBasicMaterial({color:0xffffff,side:THREE.DoubleSide,transparent:true,opacity:.85}));selR.rotation.x=-Math.PI/2;selR.position.y=.12;selR.visible=false;SC.add(selR);
 /* คิวผู้ป่วย (1 รูป = unit ราย) */
 const qG=new THREE.Group();SC.add(qG);let unit=1;
@@ -411,7 +787,7 @@ function qpos(o,k){const c=k%2,r=Math.floor(k/2);
   if(o.kind==='ph')return[21.6-r*.85,o.z+(c?.8:-.8)];
   return[-19.6+r*.85,o.z-2.5+(c?5:0)]}
 function drawQueues(){while(qG.children.length)qG.remove(qG.children[0]);
-  ITEMS.forEach(o=>{const f=Math.min(8,Math.ceil((o.cnt||0)/unit));for(let k=0;k<f;k++){const[x,z]=qpos(o,k);person(o.kind==='room'?0x3f9fd0:o.kind==='ph'?0x2fb27a:0xe9a23b,x,z,qG)}})}
+  ITEMS.forEach(o=>{const f=Math.min(8,Math.ceil((o.cnt||0)/unit));for(let k=0;k<f;k++){const[x,z]=qpos(o,k);person(o.kind==='room'?0x3f9fd0:o.kind==='ph'?0x2fb27a:0x27c4cf,x,z,qG)}})}
 /* ผู้ป่วยเดินในโรงพยาบาล */
 const pats=[],pm=new THREE.MeshStandardMaterial({color:0x27c4cf,roughness:.5,emissive:0x0a5a62,emissiveIntensity:.4});
 let M=null,spawnT=0,spawnEvery=1,dc=0,rcn=0,WT={reg:2,desk:3,q:2,room:4,ph:3};
@@ -423,9 +799,9 @@ function spawnFlow(o){if(pats.length>=95)return;const j=(Math.random()-.5)*.5;le
   else P=[[14,.5,0],[21.2,.5,0],[21.2,-1,1.5],[21.2,11,0]];
   mk(P,pmF,j)}
 function spawn(){if(pats.length>=60)return;const d=dc++%5,r=rcn++%6,xd=XD[d],xr=XR[r],j=(Math.random()-.5)*.5;
-  const P=[[-28,12,0],[-19.5,12,0],[-19.5,5,WT.reg],[-19.5,11,0],[xd,11,0],[xd,5.6,WT.desk],[xd,9.5,0],[-13.2,9.5,0],[-13.2,.5,0],[xr,.5,0],[xr,-5.8,WT.q],[xr,-9,WT.room],[xr,-5.8,0],[xr,.5,0],[21.2,.5,0],[21.2,-1,WT.ph],[21.2,11,0],[29,12,0]];
+  const q=()=>(Math.random()-.5)*.9,P=[[-28,12,0],[-19.5,12,0],[-19.5,5,WT.reg],[-19.5,11,0],[xd,11,0],[xd,5.6+q(),WT.desk],[xd,9.5,0],[-13.2,9.5,0],[-13.2,.5,0],[xr,.5,0],[xr,-5.8+q(),WT.q],[xr,-9,WT.room],[xr,-5.8,0],[xr,.5,0],[21.2,.5,0],[21.2+q(),-1+q(),WT.ph],[21.2,11,0],[29,12,0]]; // q() = กระจายจุดยืนรอเล็กน้อยไม่ให้ซ้อนกัน
   const g=new THREE.Group(),b=new THREE.Mesh(bodyG,pm),h=new THREE.Mesh(headG,pm);b.position.y=.5;h.position.y=1.12;g.add(b,h);g.position.set(P[0][0],0,P[0][1]);SC.add(g);pats.push({g,P,i:1,w:0,j,sp:3+Math.random()*.8})}
-function step(dt){spawnT+=dt;if(spawnT>spawnEvery){spawnT=0;spawn()}flowT+=dt;if(flowT>.7){flowT=0;ITEMS.forEach(o=>{if(o.flow)spawnFlow(o)})}
+function step(dt){spawnT+=dt;if(spawnT>spawnEvery){spawnT=0;spawn()}
   for(let k=pats.length-1;k>=0;k--){const p=pats[k];if(p.w>0){p.w-=dt;continue}
     const T=p.P[p.i],t=new THREE.Vector3(T[0]+p.j,0,T[1]),v=t.clone().sub(p.g.position),d=v.length();
     if(d<.2){p.w=T[2]*(.6+Math.random()*.8);p.i++;if(p.i>=p.P.length){SC.remove(p.g);pats.splice(k,1)}}
@@ -448,7 +824,12 @@ function hover(e){cv.style.cursor=hit(e)!=null?'pointer':'grab'}
 function clickAt(e){const i=hit(e);if(i!=null)select(i)}
 
 /* ---------- UI / ข้อมูล ---------- */
-let sel=null;
+/* เปิด/ปิดแถบเครื่องมือทั้งหมด (สถิติด้านบน รายการซ้าย รายละเอียดขวา คำแนะนำ ปุ่มซูม) */
+{const tb=()=>{try{return store.getItem('v3tb')==='0'}catch(e){return false}},ap=h=>{V.classList.toggle('tbh',h);$('#vtg').textContent=h?'☰ แสดงแถบเครื่องมือ':'✕ ซ่อนแถบเครื่องมือ';$('#vtg').title=h?'แสดงแถบเครื่องมือ':'ซ่อนแถบเครื่องมือ'};
+ ap(tb());$('#vtg').onclick=()=>{const h=!V.classList.contains('tbh');ap(h);try{store.setItem('v3tb',h?'0':'1')}catch(e){}}}
+let sel=null,hT;const vl=$('#vlist');
+function showL(){vl.classList.remove('hid');clearTimeout(hT);hT=setTimeout(()=>{if(vl.matches(':hover'))showL();else vl.classList.add('hid')},4000)}
+V.addEventListener('pointermove',showL);V.addEventListener('pointerdown',showL);showL();
 const stt=(w,tg)=>w==null?'ok':w<=tg?'ok':w<=tg*1.3?'warn':'bad';
 const split=(t,k)=>Array.from({length:k},(_,i)=>Math.floor(t/k)+(i<t%k?1:0));
 function model(D){const d=D.d,opd=n(d.opd_daily_count),adm=n(d.ipd_new_admit_daily),dis=n(d.ipd_discharged_daily),net=Math.max(opd-adm-dis,0);
@@ -467,16 +848,22 @@ function select(i){sel=i;auto=false;const o=ITEMS[i];
 function build(D){
   M=derive(D);const m=model(D);M.m=m;
   ITEMS.forEach((o,k)=>{const f=m.info[k];o.tm=undefined;Object.assign(o,f);o.lbl=o.kind==='reg'?fm(o.cnt)+' ราย':(o.tm==null?'รอข้อมูลเวลา':fm(o.tm,1)+' นาที');o.flow=o.kind!=='reg'&&o.tm==null;const c=COL[o.st];o.stat.material.color.setHex(c);o.stat.material.emissive.setHex(c);
-    paint(o.lb,o.name,o.lbl,CSS[o.st])});
+    (o.kind==='desk'||o.kind==='room')?paintT(o.lb,o.name,CSS[o.st]):paint(o.lb,o.name,fm(o.cnt)+' ราย',CSS[o.st])});
   signs.forEach(paintSign);
-  unit=Math.max(1,Math.ceil(Math.max(m.per5,m.per6)/8));drawQueues();
+  {const d=D.d,tm=(v,t)=>v==null?'รอข้อมูลเวลา':t+' '+fm(v,1)+' นาที';
+   paintT(TP.reg,'เปิดบัตร '+fm(m.opd)+' ราย','#27c4cf');
+   paintT(TP.desk,tm(val(d.avg_wait_reg_to_triage),'รอคัดกรอง'),CSS[ITEMS[1].st]);
+   paintT(TP.room,tm(val(d.avg_wait_for_doctor),'รอพบแพทย์'),CSS[ITEMS[6].st]);
+   paintT(TP.ph,tm(val(d.avg_wait_for_pharmacy),'รอรับยา'),CSS[ITEMS[12].st]);
+{const tt=val(d.avg_total_process_time);paintT(TP.exit,tt==null?'รอข้อมูลเวลา':'เฉลี่ย '+fm(tt,1)+' นาที',tt==null?'#27c4cf':CSS[stt(tt,TG.total)])}}
+  
   const tri=val(D.d.avg_wait_reg_to_triage),doc=val(D.d.avg_wait_for_doctor),con=val(D.d.avg_doctor_consult_time),pha=val(D.d.avg_wait_for_pharmacy);
-  WT={reg:2,desk:Math.min(8,1.5+(tri||5)/3),q:Math.min(8,1+(doc||10)/6),room:Math.min(9,2+(con||10)/3),ph:Math.min(8,1.5+(pha||8)/4)};
+  WT={reg:2,desk:tri==null?9:Math.min(8,1.5+tri/3),q:doc==null?9:Math.min(8,1+doc/6),room:Math.min(9,2+(con||10)/3),ph:pha==null?9:Math.min(8,1.5+pha/4)}; // ไม่มีเวลา = ให้คนเดินไปยืนรอที่จุดบริการนานขึ้น แทนตัวสีเหลือง
   spawnEvery=Math.min(3,Math.max(.4,.5+120/Math.max(M.opd,40)*.6));
-  $('#vlist').innerHTML=ITEMS.map((o,i)=>`<button data-i="${i}"><i style="background:${CSS[o.st]}"></i><span>${o.name}<small>${o.kind==='reg'?'เปิดบัตร ':''}${o.lbl}${o.flow?' · กำลังไหลเข้า':''}</small></span></button>`).join('');
+  $('#vlist').innerHTML=ITEMS.map((o,i)=>`<button data-i="${i}"><i style="background:${CSS[o.st]}"></i><span>${o.name}<small>${o.kind==='reg'?'เปิดบัตร ':''}${o.lbl}${o.flow?' · รอข้อมูลเวลา':''}</small></span></button>`).join('');
   document.querySelectorAll('#vlist button').forEach(b=>b.onclick=()=>select(+b.dataset.i));
-  $('#vkc').innerHTML=`<div><i>ผู้ป่วยนอก</i><b>${fm(m.opd)}</b></div><div><i>หัก IPD + จำหน่าย</i><b>−${fm(m.adm+m.dis)}</b></div><div><i>คงเหลือ</i><b>${fm(m.net)}</b></div><div><i>เฉลี่ย/โต๊ะซักประวัติ (5)</i><b>${fm(m.per5,1)}</b></div><div><i>เฉลี่ย/ห้องตรวจ (6)</i><b>${fm(m.per6,1)}</b></div>`;
-  $('#vhint').textContent=`ลากเพื่อหมุน · Ctrl + ล้อเมาส์ หรือปุ่ม ＋ − เพื่อซูม · คลิกจุดบริการเพื่อดูข้อมูล · คนที่ยืนรอ 1 รูป ≈ ${unit} ราย · แถบสี เขียว/เหลือง/แดง = สถานะเวลารอ · เทา + คนสีส้มไหลเข้า = ยังไม่มีเวลาในระบบ`;
+  {const d=D.d,t=v=>{v=val(v);return v==null?'-':fm(v,1)};$('#vkc').innerHTML=`<div><i>ผู้ป่วยนอก (ราย)</i><b>${fm(m.opd)}</b></div><div><i>รอคัดกรอง เฉลี่ย (นาที)</i><b>${t(d.avg_wait_reg_to_triage)}</b></div><div><i>รอพบแพทย์ เฉลี่ย (นาที)</i><b>${t(d.avg_wait_for_doctor)}</b></div><div><i>ตรวจโดยแพทย์ เฉลี่ย (นาที)</i><b>${t(d.avg_doctor_consult_time)}</b></div><div><i>รอรับยา เฉลี่ย (นาที)</i><b>${t(d.avg_wait_for_pharmacy)}</b></div><div><i>เวลารวม เฉลี่ย (นาที)</i><b>${t(d.avg_total_process_time)}</b></div>`}
+  $('#vhint').textContent=`ลากเพื่อหมุน · Ctrl + ล้อเมาส์ หรือปุ่ม ＋ − เพื่อซูม · คลิกจุดบริการเพื่อดูข้อมูล · รายการซ้ายซ่อนอัตโนมัติ ขยับเมาส์/แตะเพื่อแสดง · แถบสี เขียว/เหลือง/แดง = สถานะเวลารอ · เทา + คนยืนรอที่จุดบริการ = ยังไม่มีเวลาในระบบ`;
   $('#vday').value=D.day;$('#vmsg').textContent=D.demo?'แสดงข้อมูลตัวอย่าง — ตั้งค่า CONFIG ในไฟล์เพื่อใช้ข้อมูลจริง':'';
   if(sel!=null)select(sel)}
 
@@ -501,6 +888,63 @@ if(window.IntersectionObserver)new IntersectionObserver(es=>{if(es[0].isIntersec
 $('#to3d').onclick=()=>{document.querySelector('#s3d').scrollIntoView({behavior:'smooth'});boot3D()};
 if(AUTO)$('#cfgb').style.display='none';
 logo();setRange(7,document.querySelector('[data-d="7"]'));
+</script>
+<script>
+/* แถบเมนูลัดไปแต่ละส่วน (เลื่อนตามหน้าจอ) */
+(function(){const L=[['sec1','ภาพรวม'],['sec2','แนวโน้ม'],['sec3','แผนก'],['sec4','รอ OPD'],['sec5','เตียง IPD'],['sec6','ER'],['sec7','แพทย์/คลินิก'],['sec8','รายได้'],['sec9','คุณภาพ'],['sec10','แจ้งเตือน'],['sec19','รายเดือน'],['s3d','3D']];
+const n=document.createElement('nav');n.id='snav';n.setAttribute('aria-label','ไปยังส่วนต่าง ๆ');
+n.innerHTML=L.map(([i,t])=>`<a href="#${i}">${t}</a>`).join('');
+const h=document.querySelector('header');h.after(n);
+n.onclick=e=>{const a=e.target.closest('a');if(!a)return;e.preventDefault();const t=document.getElementById(a.getAttribute('href').slice(1));if(t)t.scrollIntoView({behavior:'smooth'})};
+if(window.IntersectionObserver){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting)n.querySelectorAll('a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+x.target.id))}),{rootMargin:'-30% 0px -60% 0px'});
+const watch=()=>L.forEach(([i])=>{const e=document.getElementById(i);if(e&&!e._w){e._w=1;io.observe(e)}});watch();new MutationObserver(watch).observe(document.body,{childList:true,subtree:true})}
+})();
+</script>
+<script>
+/* นาฬิกาเวลาปัจจุบัน (เขตเวลาไทย) สำหรับการ์ด 4 และ 3D */
+(function(){const f=new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+const t=()=>{const x=f.format(new Date()).replace(/\s+(?=\d{2}:)/,' · ')+' น.';document.querySelectorAll('.nowclk').forEach(e=>e.textContent=x)};t();setInterval(t,1000)})();
+</script>
+<script>
+/* ปรับขนาดตัวเลขในการ์ด KPI ให้พอดีกับความกว้างการ์ด (ตัวเลขย่อลงอัตโนมัติ / ข้อความยาวใช้ตัวเล็กลงและขึ้นบรรทัดใหม่) */
+(function(){
+ function fit(){document.querySelectorAll('main .k strong').forEach(el=>{
+  if(!el.clientWidth)return;
+  const txt=[...el.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim();
+  const isNum=/^[\d\s,.\-+%฿\/:]+$/.test(txt);
+  if(!isNum){el.style.whiteSpace='normal';el.style.fontSize='18px';el.style.lineHeight='1.3';return}
+  el.style.whiteSpace='nowrap';el.style.lineHeight='';let fs=28;el.style.fontSize=fs+'px';
+  while(el.scrollWidth>el.clientWidth+1&&fs>13){fs--;el.style.fontSize=fs+'px'}
+ })}
+ let q=0;const go=()=>{cancelAnimationFrame(q);q=requestAnimationFrame(fit)};
+ new MutationObserver(go).observe(document.querySelector('main')||document.body,{childList:true,subtree:true});
+ addEventListener('resize',go);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);go();
+})();
+</script>
+<script>
+/* จัดการ์ด KPI ภาพรวมให้แบ่งแถวเท่า ๆ กัน (เช่น 8 ใบ = 4+4, 7 ใบ = 4+3) และขยายเต็มความกว้างอัตโนมัติ */
+(function(){
+ const MIN=200; // ความกว้างขั้นต่ำต่อการ์ด (px)
+ function balance(){const MIN=innerWidth<560?150:200;document.querySelectorAll('#sec1 .kp').forEach(kp=>{
+  const n=kp.children.length,w=kp.clientWidth;if(!n||!w)return;
+  const maxCols=Math.max(1,Math.floor((w+14)/(MIN+14))),rows=Math.ceil(n/maxCols),cols=Math.ceil(n/rows);
+  const v=`repeat(${cols},minmax(0,1fr))`;if(kp.style.gridTemplateColumns!==v)kp.style.gridTemplateColumns=v})}
+ let q=0;const go=()=>{cancelAnimationFrame(q);q=requestAnimationFrame(balance)};
+ new MutationObserver(go).observe(document.querySelector('main')||document.body,{childList:true,subtree:true});
+ addEventListener('resize',go);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);go();
+})();
+</script>
+<script>
+/* ตอบสนองทุกอุปกรณ์: ห่อตารางให้เลื่อนแนวนอน + วาดกราฟใหม่เมื่อจอข้ามจุดเปลี่ยน (แคบ/กว้าง) */
+(function(){
+ function wrap(){document.querySelectorAll('main table').forEach(t=>{const p=t.parentElement;
+  if(!p||p.classList.contains('tw')||p.classList.contains('dpw')||getComputedStyle(p).overflowX==='auto')return;
+  const w=document.createElement('div');w.className='tw';t.replaceWith(w);w.append(t)})}
+ let q=0;const go=()=>{cancelAnimationFrame(q);q=requestAnimationFrame(wrap)};
+ new MutationObserver(go).observe(document.querySelector('main')||document.body,{childList:true,subtree:true});go();
+ let nar=innerWidth<640,t=0;
+ addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(()=>{const n=innerWidth<640;if(n!==nar){nar=n;if(typeof LAST!=='undefined'&&LAST&&typeof render==='function'){render(...LAST);if(typeof xtra==='function')xtra()}}},200)});
+})();
 </script>
 </body>
 </html>
